@@ -2967,11 +2967,9 @@
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" onerror="console.log('Firebase SDK load failed')"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js" onerror="console.log('Firebase DB SDK load failed')"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js" onerror="console.log('Firebase Auth SDK load failed')"></script>
     <script>
         // 初始化 Firebase
         let db = null;
-        let auth = null;
         let firebaseReady = false;
         try {
             const firebaseConfig = {
@@ -2985,7 +2983,6 @@
             };
             firebase.initializeApp(firebaseConfig);
             db = firebase.database();
-            auth = firebase.auth();
             firebaseReady = true;
         } catch(e) {
             console.log('Firebase init failed:', e);
@@ -3636,7 +3633,7 @@
             memories: { watched: [], been: [], wantWatch: [], wantGo: [] }
         };
 
-        // 从 Firebase 加载数据（先匿名登录）
+        // 从 Firebase 加载数据
         function loadData() {
             if (!firebaseReady) {
                 updateCapsulesList();
@@ -3644,24 +3641,17 @@
                 updateMemoryLists();
                 return;
             }
-            auth.signInAnonymously().then(() => {
-                db.ref('loveData').on('value', (snapshot) => {
-                    const data = snapshot.val();
-                    if (data) {
-                        localData = { ...localData, ...data };
-                        if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
-                    }
-                    updateCapsulesList();
-                    updateLettersList();
-                    updateMemoryLists();
-                }, (error) => {
-                    console.log('Load failed:', error);
-                    updateCapsulesList();
-                    updateLettersList();
-                    updateMemoryLists();
-                });
-            }).catch((error) => {
-                console.log('Auth failed:', error);
+            db.ref('loveData').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    localData = { ...localData, ...data };
+                    if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
+                }
+                updateCapsulesList();
+                updateLettersList();
+                updateMemoryLists();
+            }, (error) => {
+                console.log('Load failed:', error);
                 updateCapsulesList();
                 updateLettersList();
                 updateMemoryLists();
