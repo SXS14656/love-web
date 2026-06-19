@@ -56,6 +56,18 @@
             overflow: hidden;
         }
 
+        .page .content {
+            width: 100%;
+            flex: 1;
+            max-height: 100vh;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
         .page-1 {
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
         }
@@ -3167,6 +3179,7 @@
             // 游戏画布、弹窗、输入框等
             if (target.tagName === 'CANVAS' || target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return true;
             if (target.closest('.modal')) return true;
+            if (target.closest('.bottle-container') || target.closest('.wish-message')) return true;
             if (target.closest('.letter-item') || target.closest('.capsule-item') || target.closest('.memory-item')) return true;
             return false;
         }
@@ -3365,6 +3378,12 @@
         let isBottleOpening = false;
         let flyingFireflies = [];
         const maxFireflies = 15; // 最大萤火虫数量
+
+        // 漂流瓶点击事件（独立于页面切换的触摸事件）
+        document.getElementById('bottleContainer').addEventListener('click', function(e) {
+            e.stopPropagation();
+            openBottle();
+        });
 
         function openBottle() {
             if (isBottleOpening) return;
