@@ -2965,6 +2965,22 @@
         </button>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script>
+        // 初始化 Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCXthSxgltDHWR7wvvSRFH-hP__M6W1WJw",
+            authDomain: "love-web-67c9d.firebaseapp.com",
+            databaseURL: "https://love-web-67c9d-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "love-web-67c9d",
+            storageBucket: "love-web-67c9d.firebasestorage.app",
+            messagingSenderId: "215213060079",
+            appId: "1:215213060079:web:f2aecb3d1cf38885a4d01a"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    </script>
     <script>
         // ============ 计时器 ============
         const startDate = new Date('2026-02-26T00:00:00');
@@ -3601,8 +3617,6 @@
         });
 
         // ============ 时光胶囊 & 悄悄话信箱 ============
-        const GIST_ID = 'a296c229a3d6b462c7de7af7ed21f560';
-        const GITHUB_TOKEN = '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';
 
         // 本地数据
         let localData = {
@@ -3612,48 +3626,28 @@
             memories: { watched: [], been: [], wantWatch: [], wantGo: [] }
         };
 
-        // 从 Gist 加载数据
-        async function loadData() {
-            try {
-                const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`
-                    }
-                });
-                const gist = await response.json();
-                const content = gist.files['love-data.json'].content;
-                const data = JSON.parse(content);
-                localData = { ...localData, ...data };
-                if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
+        // 从 Firebase 加载数据
+        function loadData() {
+            db.ref('loveData').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    localData = { ...localData, ...data };
+                    if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
+                }
                 updateCapsulesList();
                 updateLettersList();
                 updateMemoryLists();
-            } catch (error) {
-                console.log('Load failed, using local data:', error);
+            }, (error) => {
+                console.log('Load failed:', error);
                 updateCapsulesList();
                 updateLettersList();
                 updateMemoryLists();
-            }
+            });
         }
 
-        // 保存数据到 Gist
-        async function saveData() {
-            try {
-                await fetch(`https://api.github.com/gists/${GIST_ID}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Authorization': `token ${GITHUB_TOKEN}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        files: {
-                            'love-data.json': {
-                                content: JSON.stringify(localData, null, 2)
-                            }
-                        }
-                    })
-                });
-            } catch (error) {
+        // 保存数据到 Firebase
+        function saveData() {
+            db.ref('loveData').set(localData).catch((error) => {
                 console.log('Save failed:', error);
             }
         }
