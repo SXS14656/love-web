@@ -26,24 +26,28 @@
             outline: none;
         }
 
-        html {
-            scroll-behavior: smooth;
-            scroll-snap-type: y mandatory;
-            overflow-y: scroll;
+        html, body {
+            margin: 0;
+            padding: 0;
             height: 100%;
-        }
-
-        body {
-            height: 100%;
+            overflow: hidden;
             font-family: 'Georgia', 'Times New Roman', serif;
             color: #fff;
             background: #0f0f1a;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        /* 页面滑动容器 */
+        .pages-wrapper {
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
         }
 
         /* 页面容器 */
         .page {
-            min-height: 100vh;
-            scroll-snap-align: start;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -2953,6 +2957,8 @@
     <!-- 爱心背景 -->
     <div class="hearts" id="hearts"></div>
 
+    <div class="pages-wrapper" id="pagesWrapper">
+
     <!-- 第一页：计时器 -->
     <section class="page page-1" id="page1">
         <div class="daytime-decor" id="daytimeDecor">
@@ -3301,6 +3307,8 @@
         </div>
     </section>
 
+    </div><!-- end pages-wrapper -->
+
     <!-- 页面指示器 -->
     <div class="page-indicator" id="pageIndicator">
         <div class="indicator-dot active" data-page="1" onclick="scrollToPage(1)"></div>
@@ -3461,39 +3469,68 @@
         }
         createHearts();
 
-        // ============ 页面滚动 ============
+        // ============ 页面滑动切换 ============
         let currentPage = 1;
         const totalPages = 6;
+        let isTransitioning = false;
+        const wrapper = document.getElementById('pagesWrapper');
 
         function scrollToPage(page) {
-            const target = document.getElementById(`page${page}`);
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth' });
-                updateIndicator(page);
-            }
+            if (page < 1 || page > totalPages || isTransitioning) return;
+            if (page === currentPage) return;
+            isTransitioning = true;
+            currentPage = page;
+            wrapper.style.transform = `translateY(-${(page - 1) * 100}vh)`;
+            updateIndicator(page);
+            setTimeout(() => { isTransitioning = false; }, 500);
         }
 
         function updateIndicator(page) {
-            currentPage = page;
             document.querySelectorAll('.indicator-dot').forEach(dot => {
                 dot.classList.remove('active');
             });
             document.querySelector(`.indicator-dot[data-page="${page}"]`).classList.add('active');
         }
 
-        // 监听滚动事件更新指示器
-        let scrollTimeout;
-        window.addEventListener('scroll', () => {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                const scrollPosition = window.scrollY;
-                const windowHeight = window.innerHeight;
-                const page = Math.round(scrollPosition / windowHeight) + 1;
-                if (page !== currentPage) {
-                    updateIndicator(page);
+        // 触摸滑动切换页面
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            if (isInInteractiveArea(e)) return;
+            touchStartY = e.touches[0].clientY;
+            touchStartTime = Date.now();
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            if (isInInteractiveArea(e)) return;
+            const touchEndY = e.changedTouches[0].clientY;
+            const deltaY = touchStartY - touchEndY;
+            const elapsed = Date.now() - touchStartTime;
+
+            // 最小滑动距离和最大时间
+            if (Math.abs(deltaY) > 50 && elapsed < 500) {
+                if (deltaY > 0 && currentPage < totalPages) {
+                    scrollToPage(currentPage + 1);
+                } else if (deltaY < 0 && currentPage > 1) {
+                    scrollToPage(currentPage - 1);
                 }
-            }, 100);
-        });
+            }
+        }, { passive: true });
+
+        // 鼠标滚轮切换页面（桌面端）
+        let wheelTimer = null;
+        document.addEventListener('wheel', (e) => {
+            if (isInInteractiveArea(e)) return;
+            if (wheelTimer) return;
+            wheelTimer = setTimeout(() => { wheelTimer = null; }, 600);
+
+            if (e.deltaY > 0 && currentPage < totalPages) {
+                scrollToPage(currentPage + 1);
+            } else if (e.deltaY < 0 && currentPage > 1) {
+                scrollToPage(currentPage - 1);
+            }
+        }, { passive: true });
 
         // ============ 爱心特效 ============
         let isPressed = false;
@@ -3531,6 +3568,16 @@
             return indicator && indicator.contains(e.target);
         }
 
+        function isInInteractiveArea(e) {
+            if (isInMusicPlayer(e) || isInPageIndicator(e)) return true;
+            const target = e.target;
+            // 游戏画布、弹窗、输入框等
+            if (target.tagName === 'CANVAS' || target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') return true;
+            if (target.closest('.modal') || target.closest('.games-container')) return true;
+            if (target.closest('.letter-item') || target.closest('.capsule-item') || target.closest('.memory-item')) return true;
+            return false;
+        }
+
         document.addEventListener('mousedown', (e) => {
             if (isInMusicPlayer(e) || isInPageIndicator(e)) return;
             isPressed = true;
@@ -3543,7 +3590,7 @@
         });
 
         document.addEventListener('mousemove', (e) => {
-            if (!isPressed || isInMusicPlayer(e) || isInPageIndicator(e)) return;
+            if (!isPressed || isInInteractiveArea(e)) return;
             lastX = e.clientX;
             lastY = e.clientY;
             createClickHeart(e.clientX, e.clientY);
@@ -3558,7 +3605,7 @@
         });
 
         document.addEventListener('touchstart', (e) => {
-            if (isInMusicPlayer(e) || isInPageIndicator(e)) return;
+            if (isInInteractiveArea(e)) return;
             const touch = e.touches[0];
             isPressed = true;
             lastX = touch.clientX;
@@ -3570,7 +3617,7 @@
         }, { passive: true });
 
         document.addEventListener('touchmove', (e) => {
-            if (!isPressed || isInMusicPlayer(e) || isInPageIndicator(e)) return;
+            if (!isPressed || isInInteractiveArea(e)) return;
             const touch = e.touches[0];
             lastX = touch.clientX;
             lastY = touch.clientY;
