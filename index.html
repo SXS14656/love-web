@@ -3994,26 +3994,31 @@
         }
 
         function addMemory() {
-            const name = document.getElementById('memoryName').value.trim();
-            const note = document.getElementById('memoryNote').value.trim();
-            const date = document.getElementById('memoryDate').value;
+            try {
+                const name = document.getElementById('memoryName').value.trim();
+                const note = document.getElementById('memoryNote').value.trim();
+                const date = document.getElementById('memoryDate').value;
 
-            if (!name) {
-                alert('请输入名称');
-                return;
+                if (!name) {
+                    alert('请输入名称');
+                    return;
+                }
+
+                const memory = {
+                    id: Date.now(),
+                    name: name,
+                    note: note,
+                    date: date || new Date().toISOString().split('T')[0]
+                };
+
+                if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
+                if (!localData.memories[currentMemoryType]) localData.memories[currentMemoryType] = [];
+                localData.memories[currentMemoryType].unshift(memory);
+                saveData();
+                updateMemoryLists();
+            } catch(e) {
+                console.error('addMemory error:', e);
             }
-
-            const memory = {
-                id: Date.now(),
-                name: name,
-                note: note,
-                date: date || new Date().toISOString().split('T')[0]
-            };
-
-            if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
-            localData.memories[currentMemoryType].unshift(memory);
-            saveData();
-            updateMemoryLists();
             closeModal('addMemoryModal');
         }
 
