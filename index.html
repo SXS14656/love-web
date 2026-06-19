@@ -4055,10 +4055,14 @@
         function closeModal(id) {
             document.getElementById(id).classList.remove('show');
             modalJustClosed = true;
-            // 强制回到当前页面位置
+            // 禁用过渡动画，强制回到当前页面位置，再恢复动画
+            wrapper.style.transition = 'none';
             wrapper.style.transform = `translateY(-${(currentPage - 1) * 100}vh)`;
             window.scrollTo(0, 0);
-            setTimeout(() => { modalJustClosed = false; }, 500);
+            requestAnimationFrame(() => {
+                wrapper.style.transition = '';
+                modalJustClosed = false;
+            });
         }
 
         // 点击弹窗外部关闭
