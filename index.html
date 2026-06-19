@@ -53,19 +53,19 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
         }
 
         .page .content {
             width: 100%;
-            flex: 1;
             max-height: 100vh;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding: 60px 0 30px;
+            box-sizing: border-box;
         }
 
         .page-1 {
@@ -3379,29 +3379,33 @@
         let flyingFireflies = [];
         const maxFireflies = 15; // 最大萤火虫数量
 
-        // 漂流瓶点击事件（独立于页面切换的触摸事件）
-        document.getElementById('bottleContainer').addEventListener('click', function(e) {
-            e.stopPropagation();
-            openBottle();
-        });
-
         function openBottle() {
-            if (isBottleOpening) return;
-            isBottleOpening = true;
+            try {
+                if (isBottleOpening) return;
+                isBottleOpening = true;
 
-            const container = document.getElementById('bottleContainer');
-            container.classList.add('opening');
+                const container = document.getElementById('bottleContainer');
+                if (!container) { isBottleOpening = false; return; }
+                container.classList.add('opening');
 
-            // 释放萤火虫
-            releaseFireflies(container);
+                // 释放萤火虫
+                releaseFireflies(container);
 
-            // 显示许愿消息
-            setTimeout(() => {
-                const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-                document.getElementById('wishText').textContent = randomWish;
-                document.getElementById('wishMessage').classList.add('show');
-                container.classList.remove('opening');
-            }, 800);
+                // 显示许愿消息
+                setTimeout(() => {
+                    try {
+                        const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+                        const wishText = document.getElementById('wishText');
+                        const wishMessage = document.getElementById('wishMessage');
+                        if (wishText) wishText.textContent = randomWish;
+                        if (wishMessage) wishMessage.classList.add('show');
+                        if (container) container.classList.remove('opening');
+                    } catch(err) { console.error('wish error:', err); }
+                }, 800);
+            } catch(err) {
+                console.error('openBottle error:', err);
+                isBottleOpening = false;
+            }
         }
 
         function closeWish() {
@@ -3571,9 +3575,12 @@
             requestAnimationFrame(animate);
         }
 
-        // 点击其他地方关闭许愿消息
+        // 点击其他地方关闭许愿消息（排除瓶子本身的点击）
         document.addEventListener('click', (e) => {
             const wishMessage = document.getElementById('wishMessage');
+            const bottleContainer = document.getElementById('bottleContainer');
+            if (!wishMessage) return;
+            if (bottleContainer && bottleContainer.contains(e.target)) return;
             if (wishMessage.classList.contains('show') && !wishMessage.contains(e.target)) {
                 closeWish();
             }
