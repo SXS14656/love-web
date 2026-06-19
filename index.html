@@ -2967,6 +2967,7 @@
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script>
         // 初始化 Firebase
         const firebaseConfig = {
@@ -2980,6 +2981,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
+        const auth = firebase.auth();
     </script>
     <script>
         // ============ 计时器 ============
@@ -3626,19 +3628,26 @@
             memories: { watched: [], been: [], wantWatch: [], wantGo: [] }
         };
 
-        // 从 Firebase 加载数据
+        // 从 Firebase 加载数据（先匿名登录）
         function loadData() {
-            db.ref('loveData').on('value', (snapshot) => {
-                const data = snapshot.val();
-                if (data) {
-                    localData = { ...localData, ...data };
-                    if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
-                }
-                updateCapsulesList();
-                updateLettersList();
-                updateMemoryLists();
-            }, (error) => {
-                console.log('Load failed:', error);
+            auth.signInAnonymously().then(() => {
+                db.ref('loveData').on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        localData = { ...localData, ...data };
+                        if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
+                    }
+                    updateCapsulesList();
+                    updateLettersList();
+                    updateMemoryLists();
+                }, (error) => {
+                    console.log('Load failed:', error);
+                    updateCapsulesList();
+                    updateLettersList();
+                    updateMemoryLists();
+                });
+            }).catch((error) => {
+                console.log('Auth failed:', error);
                 updateCapsulesList();
                 updateLettersList();
                 updateMemoryLists();
