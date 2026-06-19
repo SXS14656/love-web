@@ -2298,9 +2298,9 @@
         }
 
         /* ============ 日夜切换 ============ */
-        /* 白天背景 */
-        .daytime-bg {
-            position: fixed;
+        /* 白天装饰层（太阳、云） */
+        .daytime-decor {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
@@ -2309,24 +2309,11 @@
             z-index: 0;
             opacity: 0;
             transition: opacity 1.5s ease;
+            overflow: hidden;
         }
 
-        .daytime-bg.active {
+        .daytime-decor.active {
             opacity: 1;
-        }
-
-        .sky {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg,
-                #4a90d9 0%,
-                #74b9ff 30%,
-                #a8d8ea 55%,
-                #ffeaa7 80%,
-                #fdcb6e 100%);
         }
 
         /* 太阳 */
@@ -2503,7 +2490,7 @@
         }
 
         /* 夜晚时隐藏白天元素 */
-        body:not(.daytime) .daytime-bg {
+        body:not(.daytime) .daytime-decor {
             opacity: 0;
         }
 
@@ -2966,18 +2953,15 @@
     <!-- 爱心背景 -->
     <div class="hearts" id="hearts"></div>
 
-    <!-- 白天背景 -->
-    <div class="daytime-bg" id="daytimeBg">
-        <div class="sky"></div>
-        <div class="sun"></div>
-        <div class="sun-rays"></div>
-        <div class="cloud cloud-1"></div>
-        <div class="cloud cloud-2"></div>
-        <div class="cloud cloud-3"></div>
-    </div>
-
     <!-- 第一页：计时器 -->
     <section class="page page-1" id="page1">
+        <div class="daytime-decor" id="daytimeDecor">
+            <div class="sun"></div>
+            <div class="sun-rays"></div>
+            <div class="cloud cloud-1"></div>
+            <div class="cloud cloud-2"></div>
+            <div class="cloud cloud-3"></div>
+        </div>
         <div class="content">
             <div class="names">
                 CZG <span class="heart-icon">♥</span> LFY
@@ -3391,14 +3375,14 @@
         function updateDayNight() {
             const hour = new Date().getHours();
             const isDaytime = hour >= 6 && hour < 18;
-            const daytimeBg = document.getElementById('daytimeBg');
+            const daytimeDecor = document.getElementById('daytimeDecor');
 
             if (isDaytime) {
                 document.body.classList.add('daytime');
-                daytimeBg.classList.add('active');
+                daytimeDecor.classList.add('active');
             } else {
                 document.body.classList.remove('daytime');
-                daytimeBg.classList.remove('active');
+                daytimeDecor.classList.remove('active');
             }
         }
 
