@@ -1,0 +1,4572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CZG & LFY - Our Love Story</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-focus-ring-color: none;
+            outline: none;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            color: #fff;
+            background: #0f0f1a;
+        }
+
+        /* 页面容器 */
+        .page {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-1 {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        }
+
+        .page-2 {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 50%, #2d1b4e 100%);
+        }
+
+        .page-3 {
+            background: linear-gradient(135deg, #2d1b4e 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        /* 星星背景 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.5);
+            }
+        }
+
+        /* 流星 */
+        .meteor {
+            position: fixed;
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8));
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+            transform-origin: center center;
+        }
+
+        .meteor::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.8), 0 0 20px 6px rgba(200, 220, 255, 0.4);
+        }
+
+        @keyframes meteorFall {
+            0% {
+                opacity: 0;
+                transform: translate(0, 0) rotate(135deg);
+            }
+            5% {
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-400px, 400px) rotate(135deg);
+            }
+        }
+
+        /* 漂浮爱心 */
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 107, 129, 0.3);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* 内容容器 */
+        .content {
+            text-align: center;
+            z-index: 3;
+            padding: 20px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .names {
+            font-size: 2.8em;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px rgba(255, 107, 129, 0.5);
+        }
+
+        .names .heart-icon {
+            color: #ff6b81;
+            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            margin: 0 15px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 50px;
+            letter-spacing: 3px;
+        }
+
+        .timer-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .timer-label {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .time-unit {
+            text-align: center;
+            min-width: 70px;
+        }
+
+        .time-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #ff6b81;
+            text-shadow: 0 0 30px rgba(255, 107, 129, 0.5);
+            line-height: 1;
+            margin-bottom: 5px;
+        }
+
+        .time-label {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .separator {
+            font-size: 3em;
+            color: rgba(255, 255, 255, 0.5);
+            line-height: 1;
+            margin: 0 5px;
+        }
+
+        .since {
+            margin-top: 30px;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 1px;
+        }
+
+        .quote {
+            margin-top: 40px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1em;
+        }
+
+        /* 第二页样式 */
+        .page-2-title {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(255, 107, 129, 0.5);
+        }
+
+        .page-2-subtitle {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 50px;
+        }
+
+        /* 许愿瓶 */
+        .bottle-container {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .bottle-container:hover {
+            transform: scale(1.05);
+        }
+
+        .bottle-container:active {
+            transform: scale(0.95);
+        }
+
+        .bottle {
+            position: relative;
+            width: 120px;
+            height: 200px;
+            margin: 0 auto;
+        }
+
+        .bottle-neck {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 5px 5px 0 0;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-bottom: none;
+        }
+
+        .bottle-cork {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 20px;
+            background: linear-gradient(135deg, #8B4513, #A0522D);
+            border-radius: 5px 5px 2px 2px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .bottle-body {
+            position: absolute;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 150px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px 10px 30px 30px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bottle-shine {
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            width: 20px;
+            height: 60px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+            border-radius: 10px;
+            transform: rotate(-15deg);
+        }
+
+        .bottle-fireflies {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bottle-firefly {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ffeb3b;
+            box-shadow: 0 0 10px 5px rgba(255, 235, 59, 0.6), 0 0 20px 10px rgba(255, 235, 59, 0.3);
+            animation: bottleFloat 3s ease-in-out infinite, fireflyBlink 1.5s ease-in-out infinite;
+        }
+
+        .bottle-firefly:nth-child(1) {
+            top: 30%;
+            left: 30%;
+            animation-delay: 0s, 0s;
+        }
+
+        .bottle-firefly:nth-child(2) {
+            top: 50%;
+            left: 60%;
+            animation-delay: 0.5s, 0.3s;
+        }
+
+        .bottle-firefly:nth-child(3) {
+            top: 70%;
+            left: 40%;
+            animation-delay: 1s, 0.6s;
+        }
+
+        .bottle-firefly:nth-child(4) {
+            top: 40%;
+            left: 70%;
+            animation-delay: 1.5s, 0.9s;
+        }
+
+        .bottle-firefly:nth-child(5) {
+            top: 60%;
+            left: 25%;
+            animation-delay: 2s, 1.2s;
+        }
+
+        @keyframes bottleFloat {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(5px, -5px);
+            }
+            50% {
+                transform: translate(-3px, -8px);
+            }
+            75% {
+                transform: translate(-5px, 3px);
+            }
+        }
+
+        @keyframes fireflyBlink {
+            0%, 100% {
+                opacity: 1;
+                box-shadow: 0 0 10px 5px rgba(255, 235, 59, 0.6), 0 0 20px 10px rgba(255, 235, 59, 0.3);
+            }
+            50% {
+                opacity: 0.3;
+                box-shadow: 0 0 5px 2px rgba(255, 235, 59, 0.3), 0 0 10px 5px rgba(255, 235, 59, 0.1);
+            }
+        }
+
+        /* 瓶中蝴蝶 */
+        .bottle-butterfly {
+            position: absolute;
+            width: 10px;
+            height: 6px;
+            animation: bottleFloat 3s ease-in-out infinite, butterflyFlutter 0.8s ease-in-out infinite;
+        }
+
+        .bottle-butterfly::before,
+        .bottle-butterfly::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 6px;
+            height: 8px;
+            border-radius: 50% 50% 50% 50%;
+            background: linear-gradient(135deg, #ff9ff3, #f368e0);
+            box-shadow: 0 0 6px 2px rgba(243, 104, 224, 0.3);
+        }
+
+        .bottle-butterfly::before {
+            left: -2px;
+            transform-origin: right center;
+            animation: wingLeft 0.8s ease-in-out infinite;
+        }
+
+        .bottle-butterfly::after {
+            right: -2px;
+            transform-origin: left center;
+            animation: wingRight 0.8s ease-in-out infinite;
+        }
+
+        .bottle-butterfly:nth-child(1) {
+            top: 30%;
+            left: 30%;
+            animation-delay: 0s, 0s;
+        }
+
+        .bottle-butterfly:nth-child(2) {
+            top: 50%;
+            left: 60%;
+            animation-delay: 0.5s, 0.2s;
+        }
+
+        .bottle-butterfly:nth-child(2)::before,
+        .bottle-butterfly:nth-child(2)::after {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+            box-shadow: 0 0 6px 2px rgba(9, 132, 227, 0.3);
+        }
+
+        .bottle-butterfly:nth-child(3) {
+            top: 70%;
+            left: 40%;
+            animation-delay: 1s, 0.4s;
+        }
+
+        .bottle-butterfly:nth-child(3)::before,
+        .bottle-butterfly:nth-child(3)::after {
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            box-shadow: 0 0 6px 2px rgba(253, 203, 110, 0.3);
+        }
+
+        .bottle-butterfly:nth-child(4) {
+            top: 40%;
+            left: 70%;
+            animation-delay: 1.5s, 0.6s;
+        }
+
+        .bottle-butterfly:nth-child(5) {
+            top: 60%;
+            left: 25%;
+            animation-delay: 2s, 0.8s;
+        }
+
+        .bottle-butterfly:nth-child(5)::before,
+        .bottle-butterfly:nth-child(5)::after {
+            background: linear-gradient(135deg, #55efc4, #00b894);
+            box-shadow: 0 0 6px 2px rgba(0, 184, 148, 0.3);
+        }
+
+        @keyframes butterflyFlutter {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-3px) scale(1.05);
+            }
+        }
+
+        @keyframes wingLeft {
+            0%, 100% {
+                transform: rotateY(0deg) skewY(0deg);
+            }
+            50% {
+                transform: rotateY(50deg) skewY(5deg);
+            }
+        }
+
+        @keyframes wingRight {
+            0%, 100% {
+                transform: rotateY(0deg) skewY(0deg);
+            }
+            50% {
+                transform: rotateY(-50deg) skewY(-5deg);
+            }
+        }
+
+        /* 白天隐藏萤火虫，显示蝴蝶 */
+        body.daytime .bottle-fireflies {
+            display: none;
+        }
+
+        body.daytime .bottle-butterflies {
+            display: block;
+        }
+
+        body:not(.daytime) .bottle-butterflies {
+            display: none;
+        }
+
+        /* 飞出的蝴蝶 */
+        .flying-butterfly {
+            position: fixed;
+            pointer-events: none;
+            z-index: 500;
+            width: 14px;
+            height: 8px;
+            animation: butterflyFlutter 0.8s ease-in-out infinite;
+            --wing-from: #ff9ff3;
+            --wing-to: #f368e0;
+            --wing-shadow: rgba(243, 104, 224, 0.3);
+        }
+
+        .flying-butterfly::before,
+        .flying-butterfly::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 8px;
+            height: 10px;
+            border-radius: 50% 50% 50% 50%;
+            background: linear-gradient(135deg, var(--wing-from), var(--wing-to));
+            box-shadow: 0 0 8px 3px var(--wing-shadow);
+        }
+
+        .flying-butterfly::before {
+            left: -2px;
+            transform-origin: right center;
+            animation: wingLeft 0.6s ease-in-out infinite;
+        }
+
+        .flying-butterfly::after {
+            right: -2px;
+            transform-origin: left center;
+            animation: wingRight 0.6s ease-in-out infinite;
+        }
+
+        /* 自由飞翔的萤火虫 */
+        .flying-firefly {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ffeb3b;
+            pointer-events: none;
+            z-index: 500;
+            animation: fireflyBlink 1.5s ease-in-out infinite;
+            transition: none;
+        }
+
+        .flying-firefly::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #fff;
+        }
+
+        .bottle-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 107, 129, 0.3), transparent);
+            border-radius: 50%;
+            animation: glow 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+
+        /* 许愿消息 */
+        .wish-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .wish-message.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .wish-text {
+            font-size: 1.2em;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 20px;
+        }
+
+        .wish-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.2s ease;
+        }
+
+        .wish-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        /* 许愿瓶打开动画 */
+        .bottle-container.opening .bottle-cork {
+            animation: corkPop 0.5s ease-out forwards;
+        }
+
+        @keyframes corkPop {
+            0% {
+                transform: translateX(-50%) translateY(0) rotate(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(-40px) rotate(15deg);
+            }
+            100% {
+                transform: translateX(-50%) translateY(-60px) rotate(30deg);
+                opacity: 0;
+            }
+        }
+
+        /* 第三页样式 */
+        .page-3-title {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 107, 129, 0.5);
+        }
+
+        .page-3-subtitle {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+        }
+
+        /* 标签切换 */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            color: white;
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-content {
+            display: none;
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .create-btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .create-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #ff6b81;
+            color: #ff6b81;
+        }
+
+        .capsules-list, .letters-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 5px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .capsule-item, .letter-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .capsule-item:hover, .letter-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .letter-item {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .letter-delete-btn {
+            position: absolute;
+            right: -60px;
+            top: 0;
+            bottom: 0;
+            width: 60px;
+            background: #ff4757;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: right 0.3s ease;
+        }
+
+        .letter-item.show-delete .letter-delete-btn {
+            right: 0;
+        }
+
+        .capsule-header, .letter-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .capsule-icon {
+            font-size: 1.5em;
+        }
+
+        .capsule-status {
+            font-size: 0.75em;
+            padding: 4px 10px;
+            border-radius: 10px;
+        }
+
+        .capsule-status.locked {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .capsule-status.unlocked {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        .capsule-date, .letter-date {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .capsule-preview, .letter-preview {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.7);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .letter-sender {
+            font-size: 0.8em;
+            color: #ff6b81;
+            margin-bottom: 4px;
+        }
+
+        .letter-unread {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff6b81;
+            flex-shrink: 0;
+        }
+
+        .letter-replied {
+            font-size: 0.75em;
+            color: #4caf50;
+        }
+
+        .letter-hint {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            font-size: 0.75em;
+        }
+
+        /* 回复样式 */
+        .reply-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.15);
+            margin: 15px 0;
+        }
+
+        .reply-label {
+            font-size: 0.9em;
+            color: #ff6b81;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .reply-content {
+            font-size: 0.95em;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            text-align: left;
+            margin-bottom: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .reply-date {
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: right;
+        }
+
+        .reply-textarea {
+            height: 80px;
+            margin-bottom: 10px;
+        }
+
+        /* 弹窗样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 300px;
+            max-width: 90%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: modalPop 0.3s ease-out;
+        }
+
+        @keyframes modalPop {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.3em;
+            color: #ff6b81;
+            margin-bottom: 15px;
+        }
+
+        .modal-textarea {
+            width: 100%;
+            height: 120px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px;
+            font-size: 0.95em;
+            resize: none;
+            margin-bottom: 15px;
+            font-family: inherit;
+        }
+
+        .modal-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .modal-textarea:focus {
+            outline: none;
+            border-color: #ff6b81;
+        }
+
+        .modal-date-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .modal-date {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.9em;
+        }
+
+        .modal-date::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+
+        .modal-date-display {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 15px;
+        }
+
+        .modal-content {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+            margin-bottom: 20px;
+            text-align: left;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .modal-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .modal-btn.ok {
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 75, 87, 0.4);
+        }
+
+        .modal-btn.ok:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 75, 87, 0.5);
+        }
+
+        /* 确认弹窗 */
+        .confirm-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirm-modal.show {
+            display: flex;
+        }
+
+        .confirm-box {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 280px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: confirmPop 0.3s ease-out;
+        }
+
+        @keyframes confirmPop {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .confirm-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.5em;
+            color: white;
+        }
+
+        .confirm-title {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+        }
+
+        .confirm-task {
+            font-size: 1.2em;
+            color: #ff6b81;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .confirm-points {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 25px;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .confirm-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .confirm-btn.cancel {
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .confirm-btn.cancel:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .confirm-btn.ok {
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 75, 87, 0.4);
+        }
+
+        .confirm-btn.ok:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 75, 87, 0.5);
+        }
+
+        /* 第四页样式 - 我们的回忆 */
+        .page-4 {
+            background: linear-gradient(135deg, #2d1b4e 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .page-4-title {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 107, 129, 0.5);
+        }
+
+        .page-4-subtitle {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+        }
+
+        .memory-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 5px;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .memory-item {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .memory-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .memory-info {
+            flex: 1;
+        }
+
+        .memory-name {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 4px;
+        }
+
+        .memory-note {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .memory-date {
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 4px;
+        }
+
+        .memory-delete {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 71, 87, 0.2);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ff4757;
+            font-size: 1em;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+
+        .memory-delete:hover {
+            background: rgba(255, 71, 87, 0.4);
+        }
+
+        .memory-empty {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 20px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.95em;
+            margin-bottom: 12px;
+            font-family: inherit;
+        }
+
+        .modal-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #ff6b81;
+        }
+
+        /* 第五页样式 - 游戏中心 */
+        .page-5 {
+            background: linear-gradient(135deg, #16213e 0%, #1a1a2e 50%, #2d1b4e 100%);
+        }
+
+        .page-5-title {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 107, 129, 0.5);
+        }
+
+        .page-5-subtitle {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+        }
+
+        /* 游戏选择界面 */
+        .games-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto 20px;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 20px;
+            width: 170px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .game-name {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 5px;
+        }
+
+        .game-desc {
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 游戏界面 */
+        .game-screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .game-screen.active {
+            display: flex;
+        }
+
+        .game-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 400px;
+            margin-bottom: 15px;
+        }
+
+        .game-back {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        .game-back:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .game-score-display {
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .game-score-display span {
+            color: #ff6b81;
+            font-weight: bold;
+        }
+
+        .game-canvas-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .game-canvas {
+            display: block;
+            border-radius: 8px;
+        }
+
+        .game-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .game-control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .game-control-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.1);
+        }
+
+        /* 记忆翻牌游戏 */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .memory-card.flipped {
+            background: rgba(255, 107, 129, 0.3);
+            border-color: #ff6b81;
+        }
+
+        .memory-card.matched {
+            background: rgba(255, 107, 129, 0.5);
+            border-color: #ff6b81;
+            opacity: 0.7;
+        }
+
+        .memory-card:hover:not(.flipped):not(.matched) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 游戏结束弹窗 */
+        .game-over-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-over-modal.show {
+            display: flex;
+        }
+
+        .game-over-box {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 280px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .game-over-title {
+            font-size: 1.5em;
+            color: #ff6b81;
+            margin-bottom: 15px;
+        }
+
+        .game-over-score {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .game-over-points {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+        }
+
+        .game-over-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .game-over-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .game-over-btn.retry {
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            color: white;
+        }
+
+        .game-over-btn.retry:hover {
+            transform: scale(1.05);
+        }
+
+        .game-over-btn.home {
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .game-over-btn.home:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+
+        /* 页面指示器 */
+        .page-indicator {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .indicator-dot:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .indicator-dot.active {
+            background: #ff6b81;
+            border-color: #ff6b81;
+            box-shadow: 0 0 10px rgba(255, 107, 129, 0.5);
+        }
+
+        /* 滑动提示 */
+        .scroll-hint {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .scroll-hint svg {
+            width: 30px;
+            height: 30px;
+            fill: rgba(255, 255, 255, 0.6);
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
+        }
+
+        /* 滑动爱心特效 */
+        .click-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            font-size: 20px;
+            color: #ff6b81;
+            animation: clickHeartFloat 1.2s ease-out forwards;
+            user-select: none;
+        }
+
+        @keyframes clickHeartFloat {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1) rotate(0deg);
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0.5) rotate(var(--rot));
+            }
+        }
+
+        /* 音乐播放器 */
+        .music-player {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+
+        .music-btn {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(255, 75, 87, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(255, 75, 87, 0.5);
+        }
+
+        .music-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+            transition: transform 0.3s ease;
+        }
+
+        .music-btn.playing svg {
+            animation: musicSpin 3s linear infinite;
+        }
+
+        @keyframes musicSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .music-panel {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 280px;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transform: scale(0) translateY(20px);
+            transform-origin: bottom right;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+            touch-action: manipulation;
+        }
+
+        .music-panel.show {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .music-panel-title {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .music-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .music-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 5px;
+        }
+
+        .music-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .music-item.active {
+            background: rgba(255, 107, 129, 0.2);
+        }
+
+        .music-item-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .music-item-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: white;
+        }
+
+        .music-item-info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .music-item-name {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.9);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .music-item-artist {
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 2px;
+        }
+
+        .playback-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .control-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        .play-pause-btn {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+        }
+
+        .play-pause-btn:hover {
+            background: linear-gradient(135deg, #ff7b8f, #ff5767);
+        }
+
+        .play-pause-btn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .play-pause-btn .play-icon {
+            display: block;
+        }
+
+        .play-pause-btn .pause-icon {
+            display: none;
+        }
+
+        .play-pause-btn.playing .play-icon {
+            display: none;
+        }
+
+        .play-pause-btn.playing .pause-icon {
+            display: block;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .volume-icon {
+            width: 20px;
+            height: 20px;
+            fill: rgba(255, 255, 255, 0.7);
+            flex-shrink: 0;
+        }
+
+        .volume-slider {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            padding: 10px 0;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ff6b81;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ff6b81;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .names {
+                font-size: 1.8em;
+            }
+
+            .subtitle {
+                font-size: 1em;
+                margin-bottom: 30px;
+            }
+
+            .timer-container {
+                padding: 20px 15px;
+                margin: 15px;
+            }
+
+            .timer-label {
+                font-size: 0.9em;
+                margin-bottom: 15px;
+            }
+
+            .timer {
+                gap: 5px;
+            }
+
+            .time-unit {
+                min-width: 55px;
+            }
+
+            .time-value {
+                font-size: 1.8em;
+            }
+
+            .time-label {
+                font-size: 0.75em;
+            }
+
+            .separator {
+                font-size: 1.5em;
+                margin: 0 2px;
+            }
+
+            .page-2-title {
+                font-size: 1.8em;
+            }
+
+            .love-letter {
+                padding: 25px;
+                margin: 0 15px;
+                font-size: 0.95em;
+            }
+
+            .page-indicator {
+                right: 10px;
+            }
+
+            .music-player {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .music-btn {
+                width: 48px;
+                height: 48px;
+            }
+
+            .music-panel {
+                width: 250px;
+                right: -10px;
+            }
+
+            .bottle {
+                width: 100px;
+                height: 170px;
+            }
+
+            .bottle-neck {
+                width: 35px;
+                height: 45px;
+            }
+
+            .bottle-body {
+                width: 85px;
+                height: 130px;
+            }
+
+            .page-3-title {
+                font-size: 1.8em;
+            }
+
+            .tabs-container {
+                gap: 8px;
+            }
+
+            .tab {
+                padding: 8px 16px;
+                font-size: 0.85em;
+            }
+
+            .modal-box {
+                padding: 25px;
+                width: 280px;
+            }
+
+            .modal-textarea {
+                height: 100px;
+            }
+
+            .page-4-title {
+                font-size: 1.8em;
+            }
+
+            .page-5-title {
+                font-size: 1.8em;
+            }
+
+            .memory-list {
+                max-height: 40vh;
+            }
+
+            .game-card {
+                width: 140px;
+                padding: 15px;
+            }
+
+            .game-icon {
+                font-size: 2em;
+            }
+
+            .game-canvas-container {
+                padding: 5px;
+            }
+
+            .game-canvas {
+                width: 260px;
+                height: 260px;
+            }
+
+            .memory-grid {
+                max-width: 280px;
+                gap: 8px;
+            }
+
+            .memory-card {
+                font-size: 1.4em;
+            }
+        }
+
+        /* ============ 日夜切换 ============ */
+        /* 白天背景 */
+        .daytime-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .daytime-bg.active {
+            opacity: 1;
+        }
+
+        .sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg,
+                #4a90d9 0%,
+                #74b9ff 30%,
+                #a8d8ea 55%,
+                #ffeaa7 80%,
+                #fdcb6e 100%);
+        }
+
+        /* 太阳 */
+        .sun {
+            position: absolute;
+            top: 12%;
+            right: 15%;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff9c4 0%, #ffeb3b 40%, #ff9800 100%);
+            box-shadow: 0 0 60px 20px rgba(255, 235, 59, 0.4),
+                        0 0 120px 40px rgba(255, 152, 0, 0.2);
+            animation: sunPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes sunPulse {
+            0%, 100% { box-shadow: 0 0 60px 20px rgba(255, 235, 59, 0.4), 0 0 120px 40px rgba(255, 152, 0, 0.2); }
+            50% { box-shadow: 0 0 80px 30px rgba(255, 235, 59, 0.5), 0 0 150px 60px rgba(255, 152, 0, 0.25); }
+        }
+
+        /* 阳光光线 */
+        .sun-rays {
+            position: absolute;
+            top: 12%;
+            right: 15%;
+            width: 80px;
+            height: 80px;
+            animation: sunRaysSpin 30s linear infinite;
+        }
+
+        .sun-rays::before,
+        .sun-rays::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+        }
+
+        .sun-rays::before {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle, rgba(255, 235, 59, 0.15) 0%, transparent 70%);
+        }
+
+        .sun-rays::after {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(255, 235, 59, 0.08) 0%, transparent 70%);
+        }
+
+        @keyframes sunRaysSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* 云朵 */
+        .cloud {
+            position: absolute;
+            background: #fff;
+            border-radius: 50px;
+            opacity: 0.9;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+        }
+
+        .cloud-1 {
+            width: 120px;
+            height: 40px;
+            top: 18%;
+            left: -150px;
+            animation: cloudFloat1 35s linear infinite;
+        }
+
+        .cloud-1::before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 20px;
+        }
+
+        .cloud-1::after {
+            width: 70px;
+            height: 55px;
+            top: -30px;
+            left: 50px;
+        }
+
+        .cloud-2 {
+            width: 90px;
+            height: 30px;
+            top: 28%;
+            left: -120px;
+            opacity: 0.7;
+            animation: cloudFloat2 45s linear infinite;
+            animation-delay: 8s;
+        }
+
+        .cloud-2::before {
+            width: 40px;
+            height: 40px;
+            top: -20px;
+            left: 15px;
+        }
+
+        .cloud-2::after {
+            width: 55px;
+            height: 45px;
+            top: -25px;
+            left: 35px;
+        }
+
+        .cloud-3 {
+            width: 100px;
+            height: 35px;
+            top: 12%;
+            left: -130px;
+            opacity: 0.8;
+            animation: cloudFloat3 40s linear infinite;
+            animation-delay: 15s;
+        }
+
+        .cloud-3::before {
+            width: 45px;
+            height: 45px;
+            top: -22px;
+            left: 18px;
+        }
+
+        .cloud-3::after {
+            width: 60px;
+            height: 50px;
+            top: -28px;
+            left: 42px;
+        }
+
+        @keyframes cloudFloat1 {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(100vw + 300px)); }
+        }
+
+        @keyframes cloudFloat2 {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(100vw + 240px)); }
+        }
+
+        @keyframes cloudFloat3 {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(100vw + 260px)); }
+        }
+
+        /* 白天时隐藏夜晚元素 */
+        body.daytime .stars,
+        body.daytime .hearts {
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        body.daytime .meteor,
+        body.daytime .flying-firefly {
+            display: none;
+        }
+
+        body.daytime .click-heart {
+            opacity: 0.5;
+        }
+
+        /* 夜晚时隐藏白天元素 */
+        body:not(.daytime) .daytime-bg {
+            opacity: 0;
+        }
+
+        /* 白天时页面背景变亮 */
+        body.daytime .page-1 {
+            background: linear-gradient(135deg, #74b9ff 0%, #a8d8ea 50%, #dfe6e9 100%);
+        }
+
+        body.daytime .page-2 {
+            background: linear-gradient(135deg, #a8d8ea 0%, #dfe6e9 50%, #ffeaa7 100%);
+        }
+
+        body.daytime .page-3 {
+            background: linear-gradient(135deg, #dfe6e9 0%, #ffeaa7 50%, #fdcb6e 100%);
+        }
+
+        body.daytime .page-4 {
+            background: linear-gradient(135deg, #ffeaa7 0%, #dfe6e9 50%, #a8d8ea 100%);
+        }
+
+        body.daytime .page-5 {
+            background: linear-gradient(135deg, #a8d8ea 0%, #74b9ff 50%, #dfe6e9 100%);
+        }
+
+        /* 白天时文字变深 */
+        body.daytime .names,
+        body.daytime .page-2-title,
+        body.daytime .page-3-title,
+        body.daytime .page-4-title,
+        body.daytime .page-5-title {
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        body.daytime .names {
+            color: #2d3436;
+        }
+
+        body.daytime .subtitle {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.daytime .quote {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.daytime .page-2-title,
+        body.daytime .page-3-title,
+        body.daytime .page-4-title,
+        body.daytime .page-5-title {
+            color: #2d3436;
+        }
+
+        body.daytime .page-2-subtitle,
+        body.daytime .page-3-subtitle,
+        body.daytime .page-4-subtitle,
+        body.daytime .page-5-subtitle {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.daytime .timer-label,
+        body.daytime .time-label,
+        body.daytime .since {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.daytime .time-value {
+            color: #2d3436;
+            text-shadow: none;
+        }
+
+        body.daytime .separator {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        body.daytime .tab {
+            background: rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.daytime .tab.active {
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            color: white;
+        }
+
+        body.daytime .create-btn {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.15);
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        body.daytime .capsule-item,
+        body.daytime .letter-item,
+        body.daytime .memory-item {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.daytime .capsule-status,
+        body.daytime .letter-date,
+        body.daytime .capsule-date,
+        body.daytime .memory-date {
+            color: rgba(0, 0, 0, 0.35);
+        }
+
+        body.daytime .capsule-status.locked {
+            background: rgba(255, 193, 7, 0.15);
+            color: #d4a017;
+        }
+
+        body.daytime .capsule-status.unlocked {
+            background: rgba(76, 175, 80, 0.15);
+            color: #388e3c;
+        }
+
+        body.daytime .letter-replied {
+            color: #388e3c;
+        }
+
+        body.daytime .memory-name {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        body.daytime .memory-note {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.daytime .memory-empty {
+            color: rgba(0, 0, 0, 0.25);
+        }
+
+        body.daytime .letter-preview,
+        body.daytime .capsule-preview {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        body.daytime .letter-header .letter-date {
+            color: rgba(0, 0, 0, 0.35);
+        }
+
+        body.daytime .letter-unread {
+            background: #ff4757;
+        }
+
+        body.daytime .letter-hint {
+            color: rgba(0, 0, 0, 0.25);
+        }
+
+        body.daytime .game-card {
+            background: rgba(0, 0, 0, 0.06);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.daytime .game-name {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        body.daytime .game-desc {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        body.daytime .game-back,
+        body.daytime .game-control-btn {
+            background: rgba(0, 0, 0, 0.08);
+            color: #2d3436;
+        }
+
+        body.daytime .game-score-display {
+            color: #2d3436;
+        }
+
+        /* 白天时弹窗适配 */
+        body.daytime .modal-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: #2d3436;
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.daytime .modal-title {
+            color: #2d3436;
+        }
+
+        body.daytime .modal-content {
+            color: rgba(0, 0, 0, 0.75);
+        }
+
+        body.daytime .modal-textarea {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.15);
+            color: #2d3436;
+        }
+
+        body.daytime .modal-textarea::placeholder {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        body.daytime .modal-date-row {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        body.daytime .modal-date {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.15);
+            color: #2d3436;
+        }
+
+        body.daytime .modal-date::-webkit-calendar-picker-indicator {
+            filter: none;
+        }
+
+        body.daytime .modal-input {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.15);
+            color: #2d3436;
+        }
+
+        body.daytime .modal-input::placeholder {
+            color: rgba(0, 0, 0, 0.3);
+        }
+
+        body.daytime .modal-date-display {
+            color: rgba(0, 0, 0, 0.45);
+        }
+
+        body.daytime .modal-content {
+            color: rgba(0, 0, 0, 0.75);
+        }
+
+        body.daytime .reply-divider {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.daytime .reply-label {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.daytime .reply-content {
+            color: rgba(0, 0, 0, 0.75);
+        }
+
+        body.daytime .reply-date {
+            color: rgba(0, 0, 0, 0.35);
+        }
+
+        body.daytime .reply-textarea {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.15);
+            color: #2d3436;
+        }
+
+        body.daytime .modal-btn.cancel {
+            background: rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        body.daytime .modal-btn.cancel:hover {
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        /* 白天时音乐播放器适配 */
+        body.daytime .music-btn {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        body.daytime .music-btn svg {
+            fill: rgba(0, 0, 0, 0.6);
+        }
+
+        body.daytime .music-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        body.daytime .music-panel-title {
+            color: #2d3436;
+        }
+
+        body.daytime .music-item {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        body.daytime .music-item-name {
+            color: rgba(0, 0, 0, 0.85);
+        }
+
+        body.daytime .music-item-artist {
+            color: rgba(0, 0, 0, 0.45);
+        }
+
+        body.daytime .music-item.active {
+            background: rgba(255, 107, 129, 0.15);
+            color: #ff4757;
+        }
+
+        body.daytime .music-item.active .music-item-name {
+            color: #ff4757;
+        }
+
+        body.daytime .music-item.active .music-item-artist {
+            color: rgba(255, 71, 87, 0.6);
+        }
+
+        body.daytime .music-item-icon svg {
+            fill: rgba(0, 0, 0, 0.4);
+        }
+
+        body.daytime .music-item.active .music-item-icon svg {
+            fill: #ff4757;
+        }
+
+        body.daytime .control-btn svg {
+            fill: rgba(0, 0, 0, 0.6);
+        }
+
+        body.daytime .volume-icon {
+            fill: rgba(0, 0, 0, 0.4);
+        }
+
+        body.daytime .volume-slider {
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        body.daytime .volume-slider::-webkit-slider-thumb {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.daytime .volume-slider::-moz-range-thumb {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* 白天时指示器适配 */
+        body.daytime .indicator-dot {
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        body.daytime .indicator-dot.active {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        /* 白天时许愿瓶适配 */
+        body.daytime .bottle-body {
+            background: linear-gradient(180deg, rgba(116, 185, 255, 0.6), rgba(168, 216, 234, 0.6));
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        body.daytime .bottle-neck {
+            background: rgba(116, 185, 255, 0.4);
+            border-color: rgba(0, 0, 0, 0.15);
+        }
+
+        body.daytime .bottle-cork {
+            background: #dfe6e9;
+        }
+
+        body.daytime .bottle-firefly {
+            background: rgba(255, 152, 0, 0.6);
+            box-shadow: 0 0 8px 3px rgba(255, 152, 0, 0.4);
+        }
+
+        body.daytime .bottle-shine {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, transparent 50%);
+        }
+
+        /* 白天时滚动条适配 */
+        body.daytime ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        /* 白天时滚动提示适配 */
+        body.daytime .scroll-hint svg {
+            fill: rgba(0, 0, 0, 0.3);
+        }
+
+        /* 白天时心愿消息适配 */
+        body.daytime .wish-message {
+            background: rgba(255, 255, 255, 0.95);
+            color: #2d3436;
+        }
+
+        body.daytime .wish-text {
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        body.daytime .wish-close {
+            background: rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.daytime .wish-close:hover {
+            background: rgba(0, 0, 0, 0.15);
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        /* 白天时游戏结束弹窗适配 */
+        body.daytime .game-over-box {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.daytime .game-over-title {
+            color: #ff4757;
+        }
+
+        body.daytime .game-over-score {
+            color: #2d3436;
+        }
+
+        body.daytime .game-over-points {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.daytime .game-over-btn.home {
+            background: rgba(0, 0, 0, 0.08);
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        /* 白天时游戏画布适配 */
+        body.daytime .game-canvas-container {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        /* 超小屏幕 */
+        @media (max-width: 360px) {
+            .names {
+                font-size: 1.5em;
+            }
+
+            .time-unit {
+                min-width: 48px;
+            }
+
+            .time-value {
+                font-size: 1.5em;
+            }
+
+            .separator {
+                font-size: 1.2em;
+                margin: 0 1px;
+            }
+
+            .quote {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 星星背景 -->
+    <div class="stars" id="stars"></div>
+
+    <!-- 爱心背景 -->
+    <div class="hearts" id="hearts"></div>
+
+    <!-- 白天背景 -->
+    <div class="daytime-bg" id="daytimeBg">
+        <div class="sky"></div>
+        <div class="sun"></div>
+        <div class="sun-rays"></div>
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+    </div>
+
+    <!-- 第一页：计时器 -->
+    <section class="page page-1" id="page1">
+        <div class="content">
+            <div class="names">
+                CZG <span class="heart-icon">♥</span> LFY
+            </div>
+            <div class="subtitle">TWO SOULS, ONE HEART</div>
+            <div class="timer-container">
+                <div class="timer-label">We have been in love for</div>
+                <div class="timer">
+                    <div class="time-unit">
+                        <div class="time-value" id="days">000</div>
+                        <div class="time-label">Days</div>
+                    </div>
+                    <div class="separator">:</div>
+                    <div class="time-unit">
+                        <div class="time-value" id="hours">00</div>
+                        <div class="time-label">Hours</div>
+                    </div>
+                    <div class="separator">:</div>
+                    <div class="time-unit">
+                        <div class="time-value" id="minutes">00</div>
+                        <div class="time-label">Minutes</div>
+                    </div>
+                    <div class="separator">:</div>
+                    <div class="time-unit">
+                        <div class="time-value" id="seconds">00</div>
+                        <div class="time-label">Seconds</div>
+                    </div>
+                </div>
+                <div class="since">Since February 26, 2026</div>
+            </div>
+            <div class="quote">"Every moment with you is a treasure."</div>
+        </div>
+        <div class="scroll-hint">
+            <svg viewBox="0 0 24 24">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- 第二页：许愿瓶 -->
+    <section class="page page-2" id="page2">
+        <div class="content">
+            <div class="page-2-title">Wishing Bottle</div>
+            <p class="page-2-subtitle">点击许愿瓶，查看属于我们的祝福</p>
+            <div class="bottle-container" id="bottleContainer" onclick="openBottle()">
+                <div class="bottle">
+                    <div class="bottle-neck">
+                        <div class="bottle-cork"></div>
+                    </div>
+                    <div class="bottle-body">
+                        <div class="bottle-shine"></div>
+                        <div class="bottle-fireflies">
+                            <div class="bottle-firefly"></div>
+                            <div class="bottle-firefly"></div>
+                            <div class="bottle-firefly"></div>
+                            <div class="bottle-firefly"></div>
+                            <div class="bottle-firefly"></div>
+                        </div>
+                        <div class="bottle-butterflies">
+                            <div class="bottle-butterfly"></div>
+                            <div class="bottle-butterfly"></div>
+                            <div class="bottle-butterfly"></div>
+                            <div class="bottle-butterfly"></div>
+                            <div class="bottle-butterfly"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bottle-glow"></div>
+            </div>
+            <div class="wish-message" id="wishMessage">
+                <div class="wish-text" id="wishText"></div>
+                <div class="wish-close" onclick="closeWish()">×</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第三页：时光胶囊 & 悄悄话信箱 -->
+    <section class="page page-3" id="page3">
+        <div class="content">
+            <div class="page-3-title">Time Capsule</div>
+            <p class="page-3-subtitle">时光胶囊 & 悄悄话信箱</p>
+
+            <!-- 功能切换标签 -->
+            <div class="tabs-container">
+                <div class="tab active" data-tab="capsule" onclick="switchTab('capsule')">时光胶囊</div>
+                <div class="tab" data-tab="letter" onclick="switchTab('letter')">悄悄话信箱</div>
+            </div>
+
+            <!-- 时光胶囊 -->
+            <div class="tab-content active" id="capsuleTab">
+                <button class="create-btn" onclick="showCreateCapsule()">+ 创建时光胶囊</button>
+                <div class="capsules-list" id="capsulesList"></div>
+            </div>
+
+            <!-- 悄悄话信箱 -->
+            <div class="tab-content" id="letterTab">
+                <button class="create-btn" onclick="showWriteLetter()">+ 写悄悄话</button>
+                <div class="letters-list" id="lettersList"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 创建时光胶囊弹窗 -->
+    <div class="modal" id="createCapsuleModal">
+        <div class="modal-box">
+            <div class="modal-title">创建时光胶囊</div>
+            <textarea class="modal-textarea" id="capsuleContent" placeholder="写下想对未来说的话..."></textarea>
+            <div class="modal-date-row">
+                <label>打开日期：</label>
+                <input type="date" class="modal-date" id="capsuleDate">
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal('createCapsuleModal')">取消</button>
+                <button class="modal-btn ok" onclick="createCapsule()">封存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看时光胶囊弹窗 -->
+    <div class="modal" id="viewCapsuleModal">
+        <div class="modal-box">
+            <div class="modal-title">时光胶囊</div>
+            <div class="modal-date-display" id="capsuleCreateDate"></div>
+            <div class="modal-content" id="capsuleViewContent"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn ok" onclick="closeModal('viewCapsuleModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 未到时间提示弹窗 -->
+    <div class="modal" id="lockedCapsuleModal">
+        <div class="modal-box">
+            <div class="modal-icon">🔒</div>
+            <div class="modal-title">胶囊未到时间</div>
+            <div class="modal-content" id="lockedCapsuleTime"></div>
+            <div class="modal-buttons">
+                <button class="modal-btn ok" onclick="closeModal('lockedCapsuleModal')">好的</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 写悄悄话弹窗 -->
+    <div class="modal" id="writeLetterModal">
+        <div class="modal-box">
+            <div class="modal-title">写悄悄话</div>
+            <textarea class="modal-textarea" id="letterContent" placeholder="写下想对TA说的话..."></textarea>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal('writeLetterModal')">取消</button>
+                <button class="modal-btn ok" onclick="sendLetter()">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看悄悄话弹窗 -->
+    <div class="modal" id="viewLetterModal">
+        <div class="modal-box">
+            <div class="modal-title">悄悄话</div>
+            <div class="modal-date-display" id="letterDate"></div>
+            <div class="modal-content" id="letterViewContent"></div>
+            <!-- 回复区域 -->
+            <div id="replySection">
+                <div id="replyDisplay" style="display:none;">
+                    <div class="reply-divider"></div>
+                    <div class="reply-label">💌 回复：</div>
+                    <div class="reply-content" id="replyContent"></div>
+                    <div class="reply-date" id="replyDate"></div>
+                </div>
+                <div id="replyInput" style="display:none;">
+                    <div class="reply-divider"></div>
+                    <textarea class="modal-textarea reply-textarea" id="replyText" placeholder="写回复..."></textarea>
+                    <div class="modal-buttons">
+                        <button class="modal-btn ok" onclick="sendReply()">发送回复</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-buttons" id="letterCloseBtn">
+                <button class="modal-btn ok" onclick="closeModal('viewLetterModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-box">
+            <div class="modal-icon">🗑️</div>
+            <div class="modal-title">确认删除</div>
+            <div class="modal-content">确定要删除这条悄悄话吗？删除后无法恢复。</div>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal('deleteModal')">取消</button>
+                <button class="modal-btn ok" onclick="confirmDelete()" style="background: linear-gradient(135deg, #ff4757, #ff6b81);">删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第四页：我们的回忆 -->
+    <section class="page page-4" id="page4">
+        <div class="content">
+            <div class="page-4-title">Our Memories</div>
+            <p class="page-4-subtitle">记录我们的点点滴滴</p>
+
+            <!-- 功能切换标签 -->
+            <div class="tabs-container">
+                <div class="tab active" data-tab="watched" onclick="switchMemoryTab('watched')">看过</div>
+                <div class="tab" data-tab="been" onclick="switchMemoryTab('been')">去过</div>
+                <div class="tab" data-tab="wantWatch" onclick="switchMemoryTab('wantWatch')">想看</div>
+                <div class="tab" data-tab="wantGo" onclick="switchMemoryTab('wantGo')">想去</div>
+            </div>
+
+            <!-- 看过的电影 -->
+            <div class="tab-content active" id="watchedTab">
+                <button class="create-btn" onclick="showAddMemory('watched')">+ 添加看过的电影</button>
+                <div class="memory-list" id="watchedList"></div>
+            </div>
+
+            <!-- 去过的地方 -->
+            <div class="tab-content" id="beenTab">
+                <button class="create-btn" onclick="showAddMemory('been')">+ 添加去过的地方</button>
+                <div class="memory-list" id="beenList"></div>
+            </div>
+
+            <!-- 想看的电影 -->
+            <div class="tab-content" id="wantWatchTab">
+                <button class="create-btn" onclick="showAddMemory('wantWatch')">+ 添加想看的电影</button>
+                <div class="memory-list" id="wantWatchList"></div>
+            </div>
+
+            <!-- 想去的地方 -->
+            <div class="tab-content" id="wantGoTab">
+                <button class="create-btn" onclick="showAddMemory('wantGo')">+ 添加想去的地方</button>
+                <div class="memory-list" id="wantGoList"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 添加回忆弹窗 -->
+    <div class="modal" id="addMemoryModal">
+        <div class="modal-box">
+            <div class="modal-title" id="memoryModalTitle">添加</div>
+            <input type="text" class="modal-input" id="memoryName" placeholder="名称">
+            <input type="text" class="modal-input" id="memoryNote" placeholder="备注（可选）">
+            <input type="date" class="modal-date" id="memoryDate" style="width:100%;margin-bottom:15px;">
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" onclick="closeModal('addMemoryModal')">取消</button>
+                <button class="modal-btn ok" onclick="addMemory()">添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第五页：游戏中心 -->
+    <section class="page page-5" id="page5">
+        <div class="content">
+            <div class="page-5-title">Game Center</div>
+            <p class="page-5-subtitle">玩游戏，赢积分</p>
+
+            <!-- 游戏选择 -->
+            <div class="games-container" id="gamesList">
+                <div class="game-card" onclick="startGame('snake')">
+                    <div class="game-icon">🐍</div>
+                    <div class="game-name">爱心贪吃蛇</div>
+                    <div class="game-desc">吃掉爱心，甜蜜加倍</div>
+                </div>
+                <div class="game-card" onclick="startGame('memory')">
+                    <div class="game-icon">🃏</div>
+                    <div class="game-name">记忆翻牌</div>
+                    <div class="game-desc">翻开爱心配对</div>
+                </div>
+                <div class="game-card" onclick="startGame('catch')">
+                    <div class="game-icon">💝</div>
+                    <div class="game-name">接住爱心</div>
+                    <div class="game-desc">接住掉落的爱心</div>
+                </div>
+            </div>
+
+            <!-- 贪吃蛇游戏界面 -->
+            <div class="game-screen" id="snakeGame">
+                <div class="game-header">
+                    <button class="game-back" onclick="backToGames()">←</button>
+                    <div class="game-score-display">得分: <span id="snakeScore">0</span></div>
+                </div>
+                <div class="game-canvas-container">
+                    <canvas id="snakeCanvas" class="game-canvas" width="300" height="300"></canvas>
+                </div>
+                <div class="game-controls">
+                    <button class="game-control-btn" onclick="changeSnakeDir('up')">↑</button>
+                    <button class="game-control-btn" onclick="changeSnakeDir('left')">←</button>
+                    <button class="game-control-btn" onclick="changeSnakeDir('down')">↓</button>
+                    <button class="game-control-btn" onclick="changeSnakeDir('right')">→</button>
+                </div>
+            </div>
+
+            <!-- 记忆翻牌游戏界面 -->
+            <div class="game-screen" id="memoryGame">
+                <div class="game-header">
+                    <button class="game-back" onclick="backToGames()">←</button>
+                    <div class="game-score-display">得分: <span id="memoryScore">0</span></div>
+                </div>
+                <div class="memory-grid" id="memoryGrid"></div>
+            </div>
+
+            <!-- 接爱心游戏界面 -->
+            <div class="game-screen" id="catchGame">
+                <div class="game-header">
+                    <button class="game-back" onclick="backToGames()">←</button>
+                    <div class="game-score-display">得分: <span id="catchScore">0</span></div>
+                </div>
+                <div class="game-canvas-container">
+                    <canvas id="catchCanvas" class="game-canvas" width="300" height="300"></canvas>
+                </div>
+                <div class="game-controls">
+                    <button class="game-control-btn" onclick="moveCatchPaddle('left')">←</button>
+                    <button class="game-control-btn" onclick="moveCatchPaddle('right')">→</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 游戏结束弹窗 -->
+    <div class="game-over-modal" id="gameOverModal">
+        <div class="game-over-box">
+            <div class="game-over-title">游戏结束</div>
+            <div class="game-over-score" id="gameOverScore">0</div>
+            <div class="game-over-points" id="gameOverPoints">获得 0 积分</div>
+            <div class="game-over-buttons">
+                <button class="game-over-btn home" onclick="backToGames()">返回</button>
+                <button class="game-over-btn retry" onclick="retryGame()">再来一局</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页面指示器 -->
+    <div class="page-indicator" id="pageIndicator">
+        <div class="indicator-dot active" data-page="1" onclick="scrollToPage(1)"></div>
+        <div class="indicator-dot" data-page="2" onclick="scrollToPage(2)"></div>
+        <div class="indicator-dot" data-page="3" onclick="scrollToPage(3)"></div>
+        <div class="indicator-dot" data-page="4" onclick="scrollToPage(4)"></div>
+        <div class="indicator-dot" data-page="5" onclick="scrollToPage(5)"></div>
+    </div>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player">
+        <div class="music-panel" id="musicPanel">
+            <div class="music-panel-title">Music Player</div>
+            <div class="music-list" id="musicList"></div>
+            <div class="playback-controls">
+                <button class="control-btn" onclick="playPrev()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/>
+                    </svg>
+                </button>
+                <button class="control-btn play-pause-btn" id="playPauseBtn" onclick="togglePlay()">
+                    <svg class="play-icon" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <svg class="pause-icon" viewBox="0 0 24 24">
+                        <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+                    </svg>
+                </button>
+                <button class="control-btn" onclick="playNext()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="volume-control">
+                <svg class="volume-icon" viewBox="0 0 24 24">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="80">
+            </div>
+        </div>
+        <button class="music-btn" onclick="toggleMusicPanel()">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        // ============ 计时器 ============
+        const startDate = new Date('2026-02-26T00:00:00');
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startDate;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(3, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        updateTimer();
+        setInterval(updateTimer, 1000);
+
+        // ============ 日夜切换 ============
+        function updateDayNight() {
+            const hour = new Date().getHours();
+            const isDaytime = hour >= 6 && hour < 18;
+            const daytimeBg = document.getElementById('daytimeBg');
+
+            if (isDaytime) {
+                document.body.classList.add('daytime');
+                daytimeBg.classList.add('active');
+            } else {
+                document.body.classList.remove('daytime');
+                daytimeBg.classList.remove('active');
+            }
+        }
+
+        updateDayNight();
+        setInterval(updateDayNight, 60000); // 每分钟检查一次
+
+        // ============ 星星 ============
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.width = `${Math.random() * 3 + 1}px`;
+                star.style.height = star.style.width;
+                star.style.animationDelay = `${Math.random() * 5}s`;
+                star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+        createStars();
+
+        // ============ 流星 ============
+        function createMeteor() {
+            const meteor = document.createElement('div');
+            meteor.className = 'meteor';
+
+            // 随机起始位置（从右上角区域）
+            const startX = Math.random() * window.innerWidth * 0.8 + window.innerWidth * 0.2;
+            const startY = Math.random() * window.innerHeight * 0.3;
+
+            meteor.style.left = `${startX}px`;
+            meteor.style.top = `${startY}px`;
+
+            // 随机长度
+            const length = Math.random() * 60 + 40;
+            meteor.style.width = `${length}px`;
+
+            // 随机动画时长
+            const duration = Math.random() * 0.6 + 0.6;
+            meteor.style.animation = `meteorFall ${duration}s linear forwards`;
+
+            document.body.appendChild(meteor);
+
+            // 动画结束后移除
+            setTimeout(() => meteor.remove(), duration * 1000 + 100);
+        }
+
+        function scheduleNextMeteor() {
+            // 随机间隔 3-8 秒
+            const delay = Math.random() * 5000 + 3000;
+            setTimeout(() => {
+                createMeteor();
+                scheduleNextMeteor();
+            }, delay);
+        }
+
+        // 启动流星
+        scheduleNextMeteor();
+
+        // ============ 漂浮爱心 ============
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+            const heartSymbols = ['♥', '♡', '❤', '💕'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.fontSize = `${Math.random() * 20 + 15}px`;
+                heart.style.animationDuration = `${Math.random() * 4 + 4}s`;
+                heartsContainer.appendChild(heart);
+                setTimeout(() => heart.remove(), 8000);
+            }, 800);
+        }
+        createHearts();
+
+        // ============ 页面滚动 ============
+        let currentPage = 1;
+        const totalPages = 5;
+
+        function scrollToPage(page) {
+            const target = document.getElementById(`page${page}`);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+                updateIndicator(page);
+            }
+        }
+
+        function updateIndicator(page) {
+            currentPage = page;
+            document.querySelectorAll('.indicator-dot').forEach(dot => {
+                dot.classList.remove('active');
+            });
+            document.querySelector(`.indicator-dot[data-page="${page}"]`).classList.add('active');
+        }
+
+        // 监听滚动事件更新指示器
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollPosition = window.scrollY;
+                const windowHeight = window.innerHeight;
+                const page = Math.round(scrollPosition / windowHeight) + 1;
+                if (page !== currentPage) {
+                    updateIndicator(page);
+                }
+            }, 100);
+        });
+
+        // ============ 爱心特效 ============
+        let isPressed = false;
+        let lastX = 0;
+        let lastY = 0;
+        let heartInterval = null;
+        const heartSymbols = ['♥', '♡', '❤', '💕', '💖', '💗', '💓'];
+        const heartColors = ['#ff6b81', '#ff4757', '#ff6348', '#ff7979', '#ffb8c6', '#ff9ff3', '#f368e0'];
+
+        function createClickHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'click-heart';
+            heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            const offsetX = (Math.random() - 0.5) * 40;
+            const offsetY = (Math.random() - 0.5) * 20;
+            heart.style.left = `${x + offsetX}px`;
+            heart.style.top = `${y + offsetY}px`;
+            heart.style.fontSize = `${Math.random() * 18 + 12}px`;
+            heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            heart.style.setProperty('--tx', `${(Math.random() - 0.5) * 100}px`);
+            heart.style.setProperty('--ty', `${-(Math.random() * 120 + 60)}px`);
+            heart.style.setProperty('--rot', `${(Math.random() - 0.5) * 60}deg`);
+            heart.style.animationDuration = `${Math.random() * 0.4 + 0.8}s`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1500);
+        }
+
+        function isInMusicPlayer(e) {
+            const player = document.querySelector('.music-player');
+            return player && player.contains(e.target);
+        }
+
+        function isInPageIndicator(e) {
+            const indicator = document.querySelector('.page-indicator');
+            return indicator && indicator.contains(e.target);
+        }
+
+        document.addEventListener('mousedown', (e) => {
+            if (isInMusicPlayer(e) || isInPageIndicator(e)) return;
+            isPressed = true;
+            lastX = e.clientX;
+            lastY = e.clientY;
+            for (let i = 0; i < 3; i++) createClickHeart(e.clientX, e.clientY);
+            heartInterval = setInterval(() => {
+                if (isPressed) createClickHeart(lastX, lastY);
+            }, 80);
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isPressed || isInMusicPlayer(e) || isInPageIndicator(e)) return;
+            lastX = e.clientX;
+            lastY = e.clientY;
+            createClickHeart(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mouseup', () => {
+            isPressed = false;
+            if (heartInterval) {
+                clearInterval(heartInterval);
+                heartInterval = null;
+            }
+        });
+
+        document.addEventListener('touchstart', (e) => {
+            if (isInMusicPlayer(e) || isInPageIndicator(e)) return;
+            const touch = e.touches[0];
+            isPressed = true;
+            lastX = touch.clientX;
+            lastY = touch.clientY;
+            for (let i = 0; i < 3; i++) createClickHeart(touch.clientX, touch.clientY);
+            heartInterval = setInterval(() => {
+                if (isPressed) createClickHeart(lastX, lastY);
+            }, 80);
+        }, { passive: true });
+
+        document.addEventListener('touchmove', (e) => {
+            if (!isPressed || isInMusicPlayer(e) || isInPageIndicator(e)) return;
+            const touch = e.touches[0];
+            lastX = touch.clientX;
+            lastY = touch.clientY;
+            createClickHeart(touch.clientX, touch.clientY);
+        }, { passive: true });
+
+        document.addEventListener('touchend', () => {
+            isPressed = false;
+            if (heartInterval) {
+                clearInterval(heartInterval);
+                heartInterval = null;
+            }
+        });
+
+        // ============ 音乐播放器 ============
+        const musicList = [
+            { name: "勾指起誓", artist: "洛天依 & ilem", url: "music/洛天依&ilem-勾指起誓.mp3" },
+            { name: "心跳", artist: "王力宏", url: "music/王力宏 - 心跳.mp3" },
+            { name: "我们的歌", artist: "王力宏", url: "music/王力宏 - 我们的歌.mp3" }
+        ];
+
+        let currentMusicIndex = 0;
+        let audio = null;
+        let isPlaying = false;
+        let isPanelOpen = false;
+
+        function initMusicPlayer() {
+            audio = new Audio();
+            audio.volume = 0.8;
+            audio.loop = true;
+            audio.preload = 'metadata';
+
+            const musicListEl = document.getElementById('musicList');
+            musicList.forEach((music, index) => {
+                const item = document.createElement('div');
+                item.className = 'music-item';
+                item.innerHTML = `
+                    <div class="music-item-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                    </div>
+                    <div class="music-item-info">
+                        <div class="music-item-name">${music.name}</div>
+                        <div class="music-item-artist">${music.artist}</div>
+                    </div>
+                `;
+                item.onclick = () => playMusic(index);
+                musicListEl.appendChild(item);
+            });
+
+            const volumeSlider = document.getElementById('volumeSlider');
+            volumeSlider.addEventListener('input', (e) => {
+                e.stopPropagation();
+                audio.volume = e.target.value / 100;
+            });
+            volumeSlider.addEventListener('mousedown', (e) => e.stopPropagation());
+            volumeSlider.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+            volumeSlider.addEventListener('touchmove', (e) => {
+                e.stopPropagation();
+                audio.volume = e.target.value / 100;
+            }, { passive: true });
+
+            audio.addEventListener('ended', () => playMusic((currentMusicIndex + 1) % musicList.length));
+        }
+
+        function playMusic(index) {
+            currentMusicIndex = index;
+            audio.src = musicList[index].url;
+            audio.play().then(() => {
+                isPlaying = true;
+                updatePlayerUI();
+            }).catch(err => console.log('Play failed:', err));
+        }
+
+        function togglePlay() {
+            if (!audio) {
+                initMusicPlayer();
+                playMusic(0);
+                return;
+            }
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            } else {
+                audio.play();
+                isPlaying = true;
+            }
+            updatePlayerUI();
+        }
+
+        function playPrev() {
+            if (!audio) initMusicPlayer();
+            playMusic((currentMusicIndex - 1 + musicList.length) % musicList.length);
+        }
+
+        function playNext() {
+            if (!audio) initMusicPlayer();
+            playMusic((currentMusicIndex + 1) % musicList.length);
+        }
+
+        function updatePlayerUI() {
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const musicBtn = document.querySelector('.music-btn');
+            if (isPlaying) {
+                playPauseBtn.classList.add('playing');
+                musicBtn.classList.add('playing');
+            } else {
+                playPauseBtn.classList.remove('playing');
+                musicBtn.classList.remove('playing');
+            }
+            document.querySelectorAll('.music-item').forEach((item, index) => {
+                item.classList.toggle('active', index === currentMusicIndex);
+            });
+        }
+
+        function toggleMusicPanel() {
+            const panel = document.getElementById('musicPanel');
+            isPanelOpen = !isPanelOpen;
+            if (isPanelOpen) {
+                panel.classList.add('show');
+                if (!audio) initMusicPlayer();
+            } else {
+                panel.classList.remove('show');
+            }
+        }
+
+        document.querySelector('.music-player').addEventListener('click', (e) => e.stopPropagation());
+
+        // ============ 许愿瓶 ============
+        const wishes = [
+            "愿我们的爱情像星星一样永恒闪耀",
+            "愿每一天都充满甜蜜和欢笑",
+            "愿我们手牵手走过每一个春夏秋冬",
+            "愿我们的爱情故事永远精彩",
+            "愿我们的未来充满幸福和美好",
+            "愿我们永远是彼此的避风港",
+            "愿我们的爱情像美酒，越陈越香",
+            "愿我们一起看遍世间美景",
+            "愿我们的每一个愿望都能实现",
+            "愿我们永远保持初心，相爱如初",
+            "愿我们的生活充满惊喜和感动",
+            "愿我们的爱情像阳光一样温暖",
+            "愿我们永远是对方最坚强的后盾",
+            "愿我们一起创造更多美好回忆",
+            "愿我们的爱情像星空一样浩瀚",
+            "愿我们永远珍惜彼此的每一刻",
+            "愿我们的未来像彩虹一样绚烂",
+            "愿我们永远相信爱情的力量",
+            "愿我们一起慢慢变老，依然相爱",
+            "愿我们的每一天都是情人节"
+        ];
+
+        let isBottleOpening = false;
+        let flyingFireflies = [];
+        const maxFireflies = 15; // 最大萤火虫数量
+
+        function openBottle() {
+            if (isBottleOpening) return;
+            isBottleOpening = true;
+
+            const container = document.getElementById('bottleContainer');
+            container.classList.add('opening');
+
+            // 释放萤火虫
+            releaseFireflies(container);
+
+            // 显示许愿消息
+            setTimeout(() => {
+                const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+                document.getElementById('wishText').textContent = randomWish;
+                document.getElementById('wishMessage').classList.add('show');
+                container.classList.remove('opening');
+            }, 800);
+        }
+
+        function closeWish() {
+            document.getElementById('wishMessage').classList.remove('show');
+            setTimeout(() => {
+                isBottleOpening = false;
+            }, 500);
+        }
+
+        function releaseFireflies(container) {
+            const rect = container.getBoundingClientRect();
+            const startX = rect.left + rect.width / 2;
+            const startY = rect.top + rect.height / 3;
+            const isDaytime = document.body.classList.contains('daytime');
+
+            // 计算还能释放多少只
+            const canRelease = maxFireflies - flyingFireflies.length;
+            const releaseCount = Math.min(5, canRelease);
+
+            for (let i = 0; i < releaseCount; i++) {
+                setTimeout(() => {
+                    if (isDaytime) {
+                        createFlyingButterfly(startX, startY);
+                    } else {
+                        createFlyingFirefly(startX, startY);
+                    }
+                }, i * 150);
+            }
+        }
+
+        function createFlyingButterfly(startX, startY) {
+            const butterfly = document.createElement('div');
+            butterfly.className = 'flying-butterfly';
+            butterfly.style.left = `${startX}px`;
+            butterfly.style.top = `${startY}px`;
+            butterfly.style.animationDelay = `${Math.random() * 0.8}s`;
+
+            // 随机颜色
+            const colors = [
+                { from: '#ff9ff3', to: '#f368e0', shadow: 'rgba(243, 104, 224, 0.3)' },
+                { from: '#74b9ff', to: '#0984e3', shadow: 'rgba(9, 132, 227, 0.3)' },
+                { from: '#ffeaa7', to: '#fdcb6e', shadow: 'rgba(253, 203, 110, 0.3)' },
+                { from: '#55efc4', to: '#00b894', shadow: 'rgba(0, 184, 148, 0.3)' },
+                { from: '#fd79a8', to: '#e84393', shadow: 'rgba(232, 67, 147, 0.3)' },
+                { from: '#a29bfe', to: '#6c5ce7', shadow: 'rgba(108, 92, 231, 0.3)' }
+            ];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            butterfly.style.setProperty('--wing-from', color.from);
+            butterfly.style.setProperty('--wing-to', color.to);
+            butterfly.style.setProperty('--wing-shadow', color.shadow);
+
+            document.body.appendChild(butterfly);
+            flyingFireflies.push(butterfly);
+
+            // 初始飞出动画
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 100 + Math.random() * 150;
+            const targetX = startX + Math.cos(angle) * distance;
+            const targetY = startY + Math.sin(angle) * distance;
+
+            let currentX = startX;
+            let currentY = startY;
+            let velocityX = (targetX - startX) / 50;
+            let velocityY = (targetY - startY) / 50;
+            let frame = 0;
+            const totalFrames = 50;
+
+            function animateFlyOut() {
+                if (frame < totalFrames) {
+                    currentX += velocityX;
+                    currentY += velocityY;
+                    butterfly.style.left = `${currentX}px`;
+                    butterfly.style.top = `${currentY}px`;
+                    frame++;
+                    requestAnimationFrame(animateFlyOut);
+                } else {
+                    startFreeFlight(butterfly, currentX, currentY);
+                }
+            }
+
+            requestAnimationFrame(animateFlyOut);
+        }
+
+        function createFlyingFirefly(startX, startY) {
+            const firefly = document.createElement('div');
+            firefly.className = 'flying-firefly';
+            firefly.style.left = `${startX}px`;
+            firefly.style.top = `${startY}px`;
+
+            // 随机闪烁延迟
+            firefly.style.animationDelay = `${Math.random() * 1.5}s`;
+
+            document.body.appendChild(firefly);
+            flyingFireflies.push(firefly);
+
+            // 初始飞出动画
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 100 + Math.random() * 150;
+            const targetX = startX + Math.cos(angle) * distance;
+            const targetY = startY + Math.sin(angle) * distance;
+
+            // 使用requestAnimationFrame实现平滑飞行动画
+            let currentX = startX;
+            let currentY = startY;
+            let velocityX = (targetX - startX) / 50;
+            let velocityY = (targetY - startY) / 50;
+            let frame = 0;
+            const totalFrames = 50;
+
+            function animateFlyOut() {
+                if (frame < totalFrames) {
+                    currentX += velocityX;
+                    currentY += velocityY;
+                    firefly.style.left = `${currentX}px`;
+                    firefly.style.top = `${currentY}px`;
+                    frame++;
+                    requestAnimationFrame(animateFlyOut);
+                } else {
+                    // 开始自由飞翔
+                    startFreeFlight(firefly, currentX, currentY);
+                }
+            }
+
+            requestAnimationFrame(animateFlyOut);
+        }
+
+        function startFreeFlight(firefly, startX, startY) {
+            let x = startX;
+            let y = startY;
+            let targetX = Math.random() * window.innerWidth;
+            let targetY = Math.random() * window.innerHeight;
+            let speed = 0.5 + Math.random() * 1;
+
+            function animate() {
+                if (!firefly.parentNode) return;
+
+                // 计算到目标的方向
+                const dx = targetX - x;
+                const dy = targetY - y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 10) {
+                    // 到达目标，选择新目标
+                    targetX = Math.random() * window.innerWidth;
+                    targetY = Math.random() * window.innerHeight;
+                    speed = 0.5 + Math.random() * 1;
+                }
+
+                // 移动萤火虫
+                x += (dx / distance) * speed;
+                y += (dy / distance) * speed;
+
+                // 添加轻微的随机波动
+                x += (Math.random() - 0.5) * 2;
+                y += (Math.random() - 0.5) * 2;
+
+                // 边界检查
+                x = Math.max(0, Math.min(window.innerWidth, x));
+                y = Math.max(0, Math.min(window.innerHeight, y));
+
+                firefly.style.left = `${x}px`;
+                firefly.style.top = `${y}px`;
+
+                requestAnimationFrame(animate);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // 点击其他地方关闭许愿消息
+        document.addEventListener('click', (e) => {
+            const wishMessage = document.getElementById('wishMessage');
+            if (wishMessage.classList.contains('show') && !wishMessage.contains(e.target)) {
+                closeWish();
+            }
+        });
+
+        // ============ 时光胶囊 & 悄悄话信箱 ============
+        const GIST_ID = 'a296c229a3d6b462c7de7af7ed21f560';
+        const GITHUB_TOKEN = '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';
+
+        // 本地数据
+        let localData = {
+            capsules: [],
+            letters: [],
+            totalScore: 0,
+            memories: { watched: [], been: [], wantWatch: [], wantGo: [] }
+        };
+
+        // 从 Gist 加载数据
+        async function loadData() {
+            try {
+                const response = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`
+                    }
+                });
+                const gist = await response.json();
+                const content = gist.files['love-data.json'].content;
+                const data = JSON.parse(content);
+                localData = { ...localData, ...data };
+                if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
+                updateCapsulesList();
+                updateLettersList();
+                updateMemoryLists();
+            } catch (error) {
+                console.log('Load failed, using local data:', error);
+                updateCapsulesList();
+                updateLettersList();
+                updateMemoryLists();
+            }
+        }
+
+        // 保存数据到 Gist
+        async function saveData() {
+            try {
+                await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `token ${GITHUB_TOKEN}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        files: {
+                            'love-data.json': {
+                                content: JSON.stringify(localData, null, 2)
+                            }
+                        }
+                    })
+                });
+            } catch (error) {
+                console.log('Save failed:', error);
+            }
+        }
+
+        // 切换标签（第三页）
+        function switchTab(tab) {
+            const page3 = document.getElementById('page3');
+            page3.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            page3.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            page3.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
+            document.getElementById(`${tab}Tab`).classList.add('active');
+        }
+
+        // 显示创建时光胶囊弹窗
+        function showCreateCapsule() {
+            document.getElementById('capsuleContent').value = '';
+            // 默认设置为明天
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('capsuleDate').value = tomorrow.toISOString().split('T')[0];
+            document.getElementById('createCapsuleModal').classList.add('show');
+        }
+
+        // 创建时光胶囊
+        function createCapsule() {
+            const content = document.getElementById('capsuleContent').value.trim();
+            const openDate = document.getElementById('capsuleDate').value;
+
+            if (!content) {
+                alert('请写下你想说的话');
+                return;
+            }
+
+            if (!openDate) {
+                alert('请选择打开日期');
+                return;
+            }
+
+            const capsule = {
+                id: Date.now(),
+                content: content,
+                createDate: new Date().toISOString(),
+                openDate: openDate + 'T00:00:00'
+            };
+
+            localData.capsules.unshift(capsule);
+            saveData();
+            updateCapsulesList();
+            closeModal('createCapsuleModal');
+        }
+
+        // 查看时光胶囊
+        function viewCapsule(id) {
+            const capsule = localData.capsules.find(c => c.id === id);
+            if (!capsule) return;
+
+            const now = new Date();
+            const openTime = new Date(capsule.openDate);
+
+            if (now < openTime) {
+                // 未到时间
+                const daysLeft = Math.ceil((openTime - now) / (1000 * 60 * 60 * 24));
+                document.getElementById('lockedCapsuleTime').textContent = `还有 ${daysLeft} 天才能打开\n开启日期：${openTime.toLocaleDateString('zh-CN')}`;
+                document.getElementById('lockedCapsuleModal').classList.add('show');
+            } else {
+                // 已到时间
+                document.getElementById('capsuleCreateDate').textContent = `封存于 ${new Date(capsule.createDate).toLocaleDateString('zh-CN')}`;
+                document.getElementById('capsuleViewContent').textContent = capsule.content;
+                document.getElementById('viewCapsuleModal').classList.add('show');
+            }
+        }
+
+        // 更新时光胶囊列表
+        function updateCapsulesList() {
+            const list = document.getElementById('capsulesList');
+            list.innerHTML = '';
+
+            if (localData.capsules.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px;">还没有时光胶囊</div>';
+                return;
+            }
+
+            localData.capsules.forEach(capsule => {
+                const now = new Date();
+                const openTime = new Date(capsule.openDate);
+                const isLocked = now < openTime;
+
+                const item = document.createElement('div');
+                item.className = 'capsule-item';
+                item.onclick = () => viewCapsule(capsule.id);
+                item.innerHTML = `
+                    <div class="capsule-header">
+                        <span class="capsule-icon">${isLocked ? '🔒' : '💌'}</span>
+                        <span class="capsule-status ${isLocked ? 'locked' : 'unlocked'}">${isLocked ? '未到时间' : '可查看'}</span>
+                    </div>
+                    <div class="capsule-date">封存于 ${new Date(capsule.createDate).toLocaleDateString('zh-CN')}</div>
+                    <div class="capsule-preview">${isLocked ? '胶囊内容已封存...' : capsule.content.substring(0, 30) + '...'}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // 显示写悄悄话弹窗
+        function showWriteLetter() {
+            document.getElementById('letterContent').value = '';
+            document.getElementById('writeLetterModal').classList.add('show');
+        }
+
+        // 发送悄悄话
+        function sendLetter() {
+            const content = document.getElementById('letterContent').value.trim();
+
+            if (!content) {
+                alert('请写下你想说的话');
+                return;
+            }
+
+            const letter = {
+                id: Date.now(),
+                content: content,
+                date: new Date().toISOString(),
+                read: false
+            };
+
+            localData.letters.unshift(letter);
+
+            // 自动清理：超过100条时删除最早的
+            if (localData.letters.length > 100) {
+                localData.letters = localData.letters.slice(0, 100);
+            }
+
+            saveData();
+            updateLettersList();
+            closeModal('writeLetterModal');
+        }
+
+        // 删除悄悄话
+        let deleteLetterId = null;
+
+        function showDeleteConfirm(id) {
+            deleteLetterId = id;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function confirmDelete() {
+            if (deleteLetterId === null) return;
+
+            localData.letters = localData.letters.filter(l => l.id !== deleteLetterId);
+            saveData();
+            updateLettersList();
+            closeModal('deleteModal');
+            deleteLetterId = null;
+        }
+
+        // 查看悄悄话
+        let currentLetterId = null;
+
+        function viewLetter(id) {
+            const letter = localData.letters.find(l => l.id === id);
+            if (!letter) return;
+
+            currentLetterId = id;
+            letter.read = true;
+            saveData();
+            updateLettersList();
+
+            document.getElementById('letterDate').textContent = new Date(letter.date).toLocaleString('zh-CN');
+            document.getElementById('letterViewContent').textContent = letter.content;
+
+            // 显示/隐藏回复区域
+            const replyDisplay = document.getElementById('replyDisplay');
+            const replyInput = document.getElementById('replyInput');
+
+            if (letter.reply) {
+                // 已有回复，显示回复内容
+                replyDisplay.style.display = 'block';
+                replyInput.style.display = 'none';
+                document.getElementById('replyContent').textContent = letter.reply.content;
+                document.getElementById('replyDate').textContent = new Date(letter.reply.date).toLocaleString('zh-CN');
+            } else {
+                // 无回复，显示回复输入框
+                replyDisplay.style.display = 'none';
+                replyInput.style.display = 'block';
+                document.getElementById('replyText').value = '';
+            }
+
+            document.getElementById('viewLetterModal').classList.add('show');
+        }
+
+        // 发送回复
+        function sendReply() {
+            const content = document.getElementById('replyText').value.trim();
+            if (!content) {
+                alert('请写下回复内容');
+                return;
+            }
+
+            const letter = localData.letters.find(l => l.id === currentLetterId);
+            if (!letter) return;
+
+            letter.reply = {
+                content: content,
+                date: new Date().toISOString()
+            };
+
+            saveData();
+            updateLettersList();
+
+            // 更新显示
+            document.getElementById('replyDisplay').style.display = 'block';
+            document.getElementById('replyInput').style.display = 'none';
+            document.getElementById('replyContent').textContent = content;
+            document.getElementById('replyDate').textContent = new Date().toLocaleString('zh-CN');
+        }
+
+        // 更新悄悄话列表
+        function updateLettersList() {
+            const list = document.getElementById('lettersList');
+            list.innerHTML = '';
+
+            if (localData.letters.length === 0) {
+                list.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px;">还没有悄悄话</div>';
+                return;
+            }
+
+            localData.letters.forEach(letter => {
+                const item = document.createElement('div');
+                item.className = 'letter-item';
+
+                // 点击查看
+                let pressTimer = null;
+                let isLongPress = false;
+
+                item.onmousedown = item.ontouchstart = (e) => {
+                    isLongPress = false;
+                    pressTimer = setTimeout(() => {
+                        isLongPress = true;
+                        showDeleteConfirm(letter.id);
+                    }, 600);
+                };
+
+                item.onmouseup = item.ontouchend = () => {
+                    clearTimeout(pressTimer);
+                    if (!isLongPress) {
+                        viewLetter(letter.id);
+                    }
+                };
+
+                item.onmouseleave = () => {
+                    clearTimeout(pressTimer);
+                };
+
+                item.innerHTML = `
+                    <div class="letter-header">
+                        <span class="letter-date">${new Date(letter.date).toLocaleString('zh-CN')}</span>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            ${letter.reply ? '<span class="letter-replied">已回复</span>' : ''}
+                            ${!letter.read ? '<span class="letter-unread"></span>' : ''}
+                        </div>
+                    </div>
+                    <div class="letter-preview">${letter.content.substring(0, 40)}${letter.content.length > 40 ? '...' : ''}</div>
+                `;
+                list.appendChild(item);
+            });
+
+            // 添加长按提示
+            const hint = document.createElement('div');
+            hint.className = 'letter-hint';
+            hint.textContent = '长按悄悄话可删除';
+            list.appendChild(hint);
+        }
+
+        // ============ 回忆系统 ============
+        let currentMemoryType = '';
+
+        const memoryTypeNames = {
+            watched: '看过的电影',
+            been: '去过的地方',
+            wantWatch: '想看的电影',
+            wantGo: '想去的地方'
+        };
+
+        function switchMemoryTab(tab) {
+            const page4 = document.getElementById('page4');
+            page4.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            page4.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            page4.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
+            document.getElementById(`${tab}Tab`).classList.add('active');
+        }
+
+        function showAddMemory(type) {
+            currentMemoryType = type;
+            document.getElementById('memoryModalTitle').textContent = '添加' + memoryTypeNames[type];
+            document.getElementById('memoryName').value = '';
+            document.getElementById('memoryNote').value = '';
+            document.getElementById('memoryDate').value = new Date().toISOString().split('T')[0];
+            // 想看和想去隐藏日期
+            document.getElementById('memoryDate').style.display = (type === 'wantWatch' || type === 'wantGo') ? 'none' : '';
+            document.getElementById('addMemoryModal').classList.add('show');
+        }
+
+        function addMemory() {
+            const name = document.getElementById('memoryName').value.trim();
+            const note = document.getElementById('memoryNote').value.trim();
+            const date = document.getElementById('memoryDate').value;
+
+            if (!name) {
+                alert('请输入名称');
+                return;
+            }
+
+            const memory = {
+                id: Date.now(),
+                name: name,
+                note: note,
+                date: date || new Date().toISOString().split('T')[0]
+            };
+
+            if (!localData.memories) localData.memories = { watched: [], been: [], wantWatch: [], wantGo: [] };
+            localData.memories[currentMemoryType].unshift(memory);
+            saveData();
+            updateMemoryLists();
+            closeModal('addMemoryModal');
+        }
+
+        function deleteMemory(type, id) {
+            if (!confirm('确定要删除这条记录吗？')) return;
+            localData.memories[type] = localData.memories[type].filter(m => m.id !== id);
+            saveData();
+            updateMemoryLists();
+        }
+
+        function updateMemoryLists() {
+            if (!localData.memories) return;
+            const types = ['watched', 'been', 'wantWatch', 'wantGo'];
+            types.forEach(type => {
+                const list = document.getElementById(type + 'List');
+                if (!list) return;
+                list.innerHTML = '';
+
+                if (localData.memories[type].length === 0) {
+                    list.innerHTML = '<div class="memory-empty">还没有记录</div>';
+                    return;
+                }
+
+                localData.memories[type].forEach(memory => {
+                    const item = document.createElement('div');
+                    item.className = 'memory-item';
+                    const showDate = type !== 'wantWatch' && type !== 'wantGo';
+                    item.innerHTML = `
+                        <div class="memory-info">
+                            <div class="memory-name">${memory.name}</div>
+                            ${memory.note ? `<div class="memory-note">${memory.note}</div>` : ''}
+                            ${showDate ? `<div class="memory-date">${memory.date}</div>` : ''}
+                        </div>
+                        <button class="memory-delete" onclick="event.stopPropagation(); deleteMemory('${type}', ${memory.id})">×</button>
+                    `;
+                    list.appendChild(item);
+                });
+            });
+        }
+
+        // 关闭弹窗
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+
+        // 点击弹窗外部关闭
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+
+        // 初始化
+        loadData();
+
+        // ============ 游戏系统 ============
+        let currentGame = null;
+        let currentGameScore = 0;
+
+        // 开始游戏
+        function startGame(game) {
+            currentGame = game;
+            currentGameScore = 0;
+            document.getElementById('gamesList').style.display = 'none';
+
+            if (game === 'snake') {
+                document.getElementById('snakeGame').classList.add('active');
+                initSnakeGame();
+            } else if (game === 'memory') {
+                document.getElementById('memoryGame').classList.add('active');
+                initMemoryGame();
+            } else if (game === 'catch') {
+                document.getElementById('catchGame').classList.add('active');
+                initCatchGame();
+            }
+        }
+
+        // 返回游戏列表
+        function backToGames() {
+            document.getElementById('gamesList').style.display = 'flex';
+            document.querySelectorAll('.game-screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('gameOverModal').classList.remove('show');
+            currentGame = null;
+
+            // 停止游戏循环
+            if (snakeLoop) cancelAnimationFrame(snakeLoop);
+            if (catchLoop) cancelAnimationFrame(catchLoop);
+        }
+
+        // 重试游戏
+        function retryGame() {
+            document.getElementById('gameOverModal').classList.remove('show');
+            if (currentGame === 'snake') {
+                initSnakeGame();
+            } else if (currentGame === 'memory') {
+                initMemoryGame();
+            } else if (currentGame === 'catch') {
+                initCatchGame();
+            }
+        }
+
+        // 游戏结束
+        function gameOver(score) {
+            currentGameScore = score;
+            const points = Math.floor(score / 2); // 每2分得1积分
+
+            document.getElementById('gameOverScore').textContent = score;
+            document.getElementById('gameOverPoints').textContent = `获得 ${points} 积分`;
+            document.getElementById('gameOverModal').classList.add('show');
+
+            // 添加积分
+            if (points > 0) {
+                localData.totalScore += points;
+                saveData();
+                updateUI();
+            }
+        }
+
+        // ============ 贪吃蛇游戏 ============
+        let snakeLoop = null;
+        let snake = [];
+        let food = {};
+        let direction = 'right';
+        let nextDirection = 'right';
+        let snakeScore = 0;
+
+        function initSnakeGame() {
+            const canvas = document.getElementById('snakeCanvas');
+            const ctx = canvas.getContext('2d');
+            const gridSize = 15;
+            const gridCount = canvas.width / gridSize;
+
+            // 初始化蛇
+            snake = [
+                { x: 5, y: 10 },
+                { x: 4, y: 10 },
+                { x: 3, y: 10 }
+            ];
+            direction = 'right';
+            nextDirection = 'right';
+            snakeScore = 0;
+            document.getElementById('snakeScore').textContent = '0';
+
+            // 生成食物
+            function spawnFood() {
+                food = {
+                    x: Math.floor(Math.random() * gridCount),
+                    y: Math.floor(Math.random() * gridCount)
+                };
+                // 确保食物不在蛇身上
+                for (let seg of snake) {
+                    if (seg.x === food.x && seg.y === food.y) {
+                        return spawnFood();
+                    }
+                }
+            }
+            spawnFood();
+
+            // 游戏循环
+            let lastTime = 0;
+            const speed = 150; // 毫秒
+
+            function gameLoop(timestamp) {
+                if (timestamp - lastTime >= speed) {
+                    lastTime = timestamp;
+                    update();
+                    draw();
+                }
+                snakeLoop = requestAnimationFrame(gameLoop);
+            }
+
+            function update() {
+                direction = nextDirection;
+                const head = { ...snake[0] };
+
+                if (direction === 'up') head.y--;
+                else if (direction === 'down') head.y++;
+                else if (direction === 'left') head.x--;
+                else if (direction === 'right') head.x++;
+
+                // 撞墙检测
+                if (head.x < 0 || head.x >= gridCount || head.y < 0 || head.y >= gridCount) {
+                    cancelAnimationFrame(snakeLoop);
+                    gameOver(snakeScore);
+                    return;
+                }
+
+                // 撞自己检测
+                for (let seg of snake) {
+                    if (head.x === seg.x && head.y === seg.y) {
+                        cancelAnimationFrame(snakeLoop);
+                        gameOver(snakeScore);
+                        return;
+                    }
+                }
+
+                snake.unshift(head);
+
+                // 吃食物
+                if (head.x === food.x && head.y === food.y) {
+                    snakeScore += 10;
+                    document.getElementById('snakeScore').textContent = snakeScore;
+                    spawnFood();
+                } else {
+                    snake.pop();
+                }
+            }
+
+            function draw() {
+                ctx.fillStyle = '#1a1a2e';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // 画网格
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+                for (let i = 0; i <= gridCount; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(i * gridSize, 0);
+                    ctx.lineTo(i * gridSize, canvas.height);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(0, i * gridSize);
+                    ctx.lineTo(canvas.width, i * gridSize);
+                    ctx.stroke();
+                }
+
+                // 画蛇
+                snake.forEach((seg, i) => {
+                    if (i === 0) {
+                        ctx.fillStyle = '#ff6b81';
+                    } else {
+                        ctx.fillStyle = '#ff4757';
+                    }
+                    ctx.fillRect(seg.x * gridSize + 1, seg.y * gridSize + 1, gridSize - 2, gridSize - 2);
+                });
+
+                // 画食物（爱心）
+                ctx.font = `${gridSize - 2}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillStyle = '#ff6b81';
+                ctx.fillText('♥', food.x * gridSize + gridSize / 2, food.y * gridSize + gridSize / 2);
+            }
+
+            // 键盘控制
+            document.addEventListener('keydown', handleSnakeKey);
+
+            function handleSnakeKey(e) {
+                if (currentGame !== 'snake') return;
+                if (e.key === 'ArrowUp' && direction !== 'down') nextDirection = 'up';
+                else if (e.key === 'ArrowDown' && direction !== 'up') nextDirection = 'down';
+                else if (e.key === 'ArrowLeft' && direction !== 'right') nextDirection = 'left';
+                else if (e.key === 'ArrowRight' && direction !== 'left') nextDirection = 'right';
+            }
+
+            snakeLoop = requestAnimationFrame(gameLoop);
+        }
+
+        // 方向按钮
+        function changeSnakeDir(dir) {
+            if (dir === 'up' && direction !== 'down') nextDirection = 'up';
+            else if (dir === 'down' && direction !== 'up') nextDirection = 'down';
+            else if (dir === 'left' && direction !== 'right') nextDirection = 'left';
+            else if (dir === 'right' && direction !== 'left') nextDirection = 'right';
+        }
+
+        // ============ 记忆翻牌游戏 ============
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let memoryScore = 0;
+        let memoryLocked = false;
+
+        function initMemoryGame() {
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = '';
+            memoryCards = [];
+            flippedCards = [];
+            matchedPairs = 0;
+            memoryScore = 0;
+            memoryLocked = false;
+            document.getElementById('memoryScore').textContent = '0';
+
+            // 创建卡片对
+            const symbols = ['♥', '♡', '❤', '💕', '💖', '💗', '💓', '💘'];
+            const pairs = [...symbols, ...symbols];
+
+            // 洗牌
+            for (let i = pairs.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+            }
+
+            // 创建卡片元素
+            pairs.forEach((symbol, index) => {
+                const card = document.createElement('div');
+                card.className = 'memory-card';
+                card.dataset.index = index;
+                card.dataset.symbol = symbol;
+                card.textContent = '?';
+                card.onclick = () => flipCard(card);
+                grid.appendChild(card);
+                memoryCards.push(card);
+            });
+        }
+
+        function flipCard(card) {
+            if (memoryLocked) return;
+            if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+            if (flippedCards.length >= 2) return;
+
+            card.classList.add('flipped');
+            card.textContent = card.dataset.symbol;
+            flippedCards.push(card);
+
+            if (flippedCards.length === 2) {
+                memoryLocked = true;
+                const [card1, card2] = flippedCards;
+
+                if (card1.dataset.symbol === card2.dataset.symbol) {
+                    // 配对成功
+                    setTimeout(() => {
+                        card1.classList.add('matched');
+                        card2.classList.add('matched');
+                        matchedPairs++;
+                        memoryScore += 20;
+                        document.getElementById('memoryScore').textContent = memoryScore;
+                        flippedCards = [];
+                        memoryLocked = false;
+
+                        // 游戏胜利
+                        if (matchedPairs === 8) {
+                            setTimeout(() => gameOver(memoryScore), 500);
+                        }
+                    }, 500);
+                } else {
+                    // 配对失败
+                    setTimeout(() => {
+                        card1.classList.remove('flipped');
+                        card1.textContent = '?';
+                        card2.classList.remove('flipped');
+                        card2.textContent = '?';
+                        flippedCards = [];
+                        memoryLocked = false;
+                    }, 1000);
+                }
+            }
+        }
+
+        // ============ 接爱心游戏 ============
+        let catchLoop = null;
+        let catchPaddle = { x: 120, y: 270, width: 60, height: 10 };
+        let catchHearts = [];
+        let catchScore = 0;
+        let catchSpeed = 2;
+        let spawnTimer = 0;
+
+        function initCatchGame() {
+            const canvas = document.getElementById('catchCanvas');
+            const ctx = canvas.getContext('2d');
+
+            catchPaddle = { x: 120, y: 270, width: 60, height: 10 };
+            catchHearts = [];
+            catchScore = 0;
+            catchSpeed = 2;
+            spawnTimer = 0;
+            document.getElementById('catchScore').textContent = '0';
+
+            // 触摸/鼠标控制
+            let isDragging = false;
+
+            canvas.onmousedown = (e) => {
+                isDragging = true;
+                updatePaddlePosition(e);
+            };
+            canvas.onmousemove = (e) => {
+                if (isDragging) updatePaddlePosition(e);
+            };
+            canvas.onmouseup = () => isDragging = false;
+            canvas.onmouseleave = () => isDragging = false;
+
+            canvas.ontouchstart = (e) => {
+                e.preventDefault();
+                isDragging = true;
+                updatePaddlePosition(e.touches[0]);
+            };
+            canvas.ontouchmove = (e) => {
+                e.preventDefault();
+                if (isDragging) updatePaddlePosition(e.touches[0]);
+            };
+            canvas.ontouchend = () => isDragging = false;
+
+            function updatePaddlePosition(e) {
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+                catchPaddle.x = Math.max(0, Math.min(canvas.width - catchPaddle.width, x - catchPaddle.width / 2));
+            }
+
+            // 游戏循环
+            let lastTime = 0;
+
+            function gameLoop(timestamp) {
+                if (timestamp - lastTime >= 16) { // ~60fps
+                    lastTime = timestamp;
+                    update();
+                    draw();
+                }
+                catchLoop = requestAnimationFrame(gameLoop);
+            }
+
+            function update() {
+                // 生成爱心
+                spawnTimer++;
+                if (spawnTimer >= 30) {
+                    spawnTimer = 0;
+                    catchHearts.push({
+                        x: Math.random() * (canvas.width - 20) + 10,
+                        y: -20,
+                        speed: catchSpeed + Math.random()
+                    });
+                }
+
+                // 更新爱心位置
+                for (let i = catchHearts.length - 1; i >= 0; i--) {
+                    catchHearts[i].y += catchHearts[i].speed;
+
+                    // 接住检测
+                    if (
+                        catchHearts[i].y + 15 >= catchPaddle.y &&
+                        catchHearts[i].y <= catchPaddle.y + catchPaddle.height &&
+                        catchHearts[i].x >= catchPaddle.x &&
+                        catchHearts[i].x <= catchPaddle.x + catchPaddle.width
+                    ) {
+                        catchScore += 10;
+                        document.getElementById('catchScore').textContent = catchScore;
+                        catchHearts.splice(i, 1);
+                        // 加速
+                        if (catchScore % 50 === 0) catchSpeed += 0.5;
+                        continue;
+                    }
+
+                    // 漏掉检测
+                    if (catchHearts[i].y > canvas.height) {
+                        catchHearts.splice(i, 1);
+                        // 漏掉5个结束游戏
+                        if (catchHearts.length === 0 && catchScore > 0) {
+                            // 继续游戏，不结束
+                        }
+                    }
+                }
+
+                // 游戏结束条件：漏掉太多
+                if (catchScore >= 100 && catchHearts.length === 0) {
+                    cancelAnimationFrame(catchLoop);
+                    gameOver(catchScore);
+                }
+            }
+
+            function draw() {
+                ctx.fillStyle = '#1a1a2e';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // 画挡板
+                ctx.fillStyle = '#ff6b81';
+                ctx.fillRect(catchPaddle.x, catchPaddle.y, catchPaddle.width, catchPaddle.height);
+
+                // 画爱心
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                catchHearts.forEach(heart => {
+                    ctx.fillStyle = '#ff6b81';
+                    ctx.fillText('♥', heart.x, heart.y);
+                });
+
+                // 画提示
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.font = '12px Arial';
+                ctx.fillText('拖动或点击左右按钮移动挡板', canvas.width / 2, 20);
+            }
+
+            catchLoop = requestAnimationFrame(gameLoop);
+        }
+
+        // 移动挡板
+        function moveCatchPaddle(dir) {
+            if (currentGame !== 'catch') return;
+            const canvas = document.getElementById('catchCanvas');
+            if (dir === 'left') {
+                catchPaddle.x = Math.max(0, catchPaddle.x - 30);
+            } else {
+                catchPaddle.x = Math.min(canvas.width - catchPaddle.width, catchPaddle.x + 30);
+            }
+        }
+
+        // 键盘控制接爱心
+        document.addEventListener('keydown', (e) => {
+            if (currentGame !== 'catch') return;
+            if (e.key === 'ArrowLeft') moveCatchPaddle('left');
+            if (e.key === 'ArrowRight') moveCatchPaddle('right');
+        });
+
+        // 添加第四页的移动控制按钮样式
+    </script>
+</body>
+</html>
