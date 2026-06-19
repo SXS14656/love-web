@@ -2699,7 +2699,7 @@
         <div class="content">
             <div class="page-2-title">Wishing Bottle</div>
             <p class="page-2-subtitle">点击许愿瓶，查看属于我们的祝福</p>
-            <div class="bottle-container" id="bottleContainer" onclick="openBottle()">
+            <div class="bottle-container" id="bottleContainer">
                 <div class="bottle">
                     <div class="bottle-neck">
                         <div class="bottle-cork"></div>
@@ -2723,10 +2723,6 @@
                     </div>
                 </div>
                 <div class="bottle-glow"></div>
-            </div>
-            <div class="wish-message" id="wishMessage">
-                <div class="wish-text" id="wishText"></div>
-                <div class="wish-close" onclick="closeWish()">×</div>
             </div>
         </div>
     </section>
@@ -2914,6 +2910,12 @@
     </section>
 
     </div><!-- end pages-wrapper -->
+
+    <!-- 许愿消息弹窗（独立于页面） -->
+    <div class="wish-message" id="wishMessage">
+        <div class="wish-text" id="wishText"></div>
+        <div class="wish-close" id="wishCloseBtn">×</div>
+    </div>
 
     <!-- 页面指示器 -->
     <div class="page-indicator" id="pageIndicator">
@@ -3377,42 +3379,55 @@
 
         let isBottleOpening = false;
         let flyingFireflies = [];
-        const maxFireflies = 15; // 最大萤火虫数量
+        const maxFireflies = 15;
+
+        // 绑定漂流瓶点击事件
+        (function() {
+            const bottle = document.getElementById('bottleContainer');
+            const closeBtn = document.getElementById('wishCloseBtn');
+            if (bottle) {
+                bottle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openBottle();
+                });
+                bottle.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    openBottle();
+                });
+            }
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    closeWish();
+                });
+            }
+        })();
 
         function openBottle() {
-            try {
-                if (isBottleOpening) return;
-                isBottleOpening = true;
+            if (isBottleOpening) return;
+            isBottleOpening = true;
 
-                const container = document.getElementById('bottleContainer');
-                if (!container) { isBottleOpening = false; return; }
-                container.classList.add('opening');
+            const container = document.getElementById('bottleContainer');
+            const wishMessage = document.getElementById('wishMessage');
+            const wishText = document.getElementById('wishText');
+            if (!container || !wishMessage || !wishText) { isBottleOpening = false; return; }
 
-                // 释放萤火虫
-                releaseFireflies(container);
+            container.classList.add('opening');
+            releaseFireflies(container);
 
-                // 显示许愿消息
-                setTimeout(() => {
-                    try {
-                        const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
-                        const wishText = document.getElementById('wishText');
-                        const wishMessage = document.getElementById('wishMessage');
-                        if (wishText) wishText.textContent = randomWish;
-                        if (wishMessage) wishMessage.classList.add('show');
-                        if (container) container.classList.remove('opening');
-                    } catch(err) { console.error('wish error:', err); }
-                }, 800);
-            } catch(err) {
-                console.error('openBottle error:', err);
-                isBottleOpening = false;
-            }
+            setTimeout(() => {
+                const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+                wishText.textContent = randomWish;
+                wishMessage.classList.add('show');
+                container.classList.remove('opening');
+            }, 800);
         }
 
         function closeWish() {
-            document.getElementById('wishMessage').classList.remove('show');
-            setTimeout(() => {
-                isBottleOpening = false;
-            }, 500);
+            const wishMessage = document.getElementById('wishMessage');
+            if (wishMessage) wishMessage.classList.remove('show');
+            setTimeout(() => { isBottleOpening = false; }, 500);
         }
 
         function releaseFireflies(container) {
@@ -3575,13 +3590,12 @@
             requestAnimationFrame(animate);
         }
 
-        // 点击其他地方关闭许愿消息（排除瓶子本身的点击）
+        // 点击其他地方关闭许愿消息
         document.addEventListener('click', (e) => {
             const wishMessage = document.getElementById('wishMessage');
-            const bottleContainer = document.getElementById('bottleContainer');
             if (!wishMessage) return;
-            if (bottleContainer && bottleContainer.contains(e.target)) return;
-            if (wishMessage.classList.contains('show') && !wishMessage.contains(e.target)) {
+            if (e.target.closest('.bottle-container') || e.target.closest('.wish-message')) return;
+            if (wishMessage.classList.contains('show')) {
                 closeWish();
             }
         });
