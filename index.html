@@ -3376,6 +3376,15 @@
 
         document.querySelector('.music-player').addEventListener('click', (e) => e.stopPropagation());
 
+        // 点击音乐面板外部关闭面板
+        document.addEventListener('click', () => {
+            if (isPanelOpen) {
+                const panel = document.getElementById('musicPanel');
+                panel.classList.remove('show');
+                isPanelOpen = false;
+            }
+        });
+
         // ============ 许愿瓶 ============
         const wishes = [
             "愿我们的爱情像星星一样永恒闪耀",
@@ -4053,16 +4062,26 @@
         let modalJustClosed = false;
 
         function closeModal(id) {
-            document.getElementById(id).classList.remove('show');
-            modalJustClosed = true;
+            // 先让输入框失焦，触发键盘收起，等键盘收起后再关闭弹窗
+            if (document.activeElement) {
+                document.activeElement.blur();
+            }
+            // 立即锁定页面位置，防止键盘收起导致的页面跳动
+            const lockedPage = currentPage;
+            wrapper.style.transition = 'none';
+            wrapper.style.transform = `translateY(-${(lockedPage - 1) * 100}vh)`;
+
             setTimeout(() => {
-                wrapper.style.transition = 'none';
-                wrapper.style.transform = `translateY(-${(currentPage - 1) * 100}vh)`;
+                document.getElementById(id).classList.remove('show');
+                modalJustClosed = true;
+                // 再次确保位置正确
+                wrapper.style.transform = `translateY(-${(lockedPage - 1) * 100}vh)`;
                 setTimeout(() => {
                     wrapper.style.transition = '';
+                    wrapper.style.transform = `translateY(-${(lockedPage - 1) * 100}vh)`;
                     modalJustClosed = false;
-                }, 50);
-            }, 300);
+                }, 100);
+            }, 350);
         }
 
         // 点击弹窗外部关闭
