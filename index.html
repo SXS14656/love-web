@@ -3127,13 +3127,13 @@
         let touchStartTime = 0;
 
         document.addEventListener('touchstart', (e) => {
-            if (isInInteractiveArea(e)) return;
+            if (isInInteractiveArea(e) || modalJustClosed) return;
             touchStartY = e.touches[0].clientY;
             touchStartTime = Date.now();
         }, { passive: true });
 
         document.addEventListener('touchend', (e) => {
-            if (isInInteractiveArea(e)) return;
+            if (isInInteractiveArea(e) || modalJustClosed) return;
             const touchEndY = e.changedTouches[0].clientY;
             const deltaY = touchStartY - touchEndY;
             const elapsed = Date.now() - touchStartTime;
@@ -3151,7 +3151,7 @@
         // 鼠标滚轮切换页面（桌面端）
         let wheelTimer = null;
         document.addEventListener('wheel', (e) => {
-            if (isInInteractiveArea(e)) return;
+            if (isInInteractiveArea(e) || modalJustClosed) return;
             if (wheelTimer) return;
             wheelTimer = setTimeout(() => { wheelTimer = null; }, 600);
 
@@ -4050,12 +4050,15 @@
         }
 
         // 关闭弹窗
+        let modalJustClosed = false;
+
         function closeModal(id) {
             document.getElementById(id).classList.remove('show');
-            // 关闭弹窗后确保页面位置正确（防止手机键盘收起导致偏移）
-            setTimeout(() => {
-                wrapper.style.transform = `translateY(-${(currentPage - 1) * 100}vh)`;
-            }, 100);
+            modalJustClosed = true;
+            // 强制回到当前页面位置
+            wrapper.style.transform = `translateY(-${(currentPage - 1) * 100}vh)`;
+            window.scrollTo(0, 0);
+            setTimeout(() => { modalJustClosed = false; }, 500);
         }
 
         // 点击弹窗外部关闭
