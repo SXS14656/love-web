@@ -4154,7 +4154,6 @@
             currentLetterId = id;
             letter.read = true;
             saveData();
-            updateLettersList();
 
             document.getElementById('letterDate').textContent = new Date(letter.date).toLocaleString('zh-CN');
             document.getElementById('letterViewContent').textContent = letter.content;
@@ -4177,6 +4176,9 @@
             }
 
             document.getElementById('viewLetterModal').classList.add('show');
+
+            // 延迟更新列表，避免移动端触摸事件冲突
+            setTimeout(() => updateLettersList(), 100);
         }
 
         // 发送回复
@@ -4223,7 +4225,7 @@
                 let pressTimer = null;
                 let isLongPress = false;
 
-                item.onmousedown = item.ontouchstart = (e) => {
+                item.ontouchstart = (e) => {
                     isLongPress = false;
                     pressTimer = setTimeout(() => {
                         isLongPress = true;
@@ -4231,7 +4233,25 @@
                     }, 600);
                 };
 
-                item.onmouseup = item.ontouchend = () => {
+                item.ontouchend = (e) => {
+                    e.preventDefault();
+                    clearTimeout(pressTimer);
+                    if (!isLongPress) {
+                        viewLetter(letter.id);
+                    }
+                };
+
+                item.onmousedown = (e) => {
+                    if (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;
+                    isLongPress = false;
+                    pressTimer = setTimeout(() => {
+                        isLongPress = true;
+                        showDeleteConfirm(letter.id);
+                    }, 600);
+                };
+
+                item.onmouseup = (e) => {
+                    if (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;
                     clearTimeout(pressTimer);
                     if (!isLongPress) {
                         viewLetter(letter.id);
