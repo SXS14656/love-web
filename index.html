@@ -3314,24 +3314,6 @@
             audio.addEventListener('ended', () => playMusic((currentMusicIndex + 1) % musicList.length));
         }
 
-        // 自动播放第一首歌
-        function autoPlayMusic() {
-            if (!audio) initMusicPlayer();
-            playMusic(0);
-        }
-
-        // 页面加载后尝试自动播放，若被浏览器拦截则在首次交互时播放
-        (function tryAutoPlay() {
-            autoPlayMusic();
-            function onFirstInteract() {
-                if (!isPlaying) autoPlayMusic();
-                document.removeEventListener('touchstart', onFirstInteract);
-                document.removeEventListener('click', onFirstInteract);
-            }
-            document.addEventListener('touchstart', onFirstInteract, { once: true });
-            document.addEventListener('click', onFirstInteract, { once: true });
-        })();
-
         function playMusic(index) {
             currentMusicIndex = index;
             audio.src = musicList[index].url;
