@@ -4055,12 +4055,14 @@
         function closeModal(id) {
             document.getElementById(id).classList.remove('show');
             modalJustClosed = true;
-            // 禁用过渡动画，强制回到当前页面位置
-            wrapper.style.transition = 'none';
-            wrapper.style.transform = `translateY(-${(currentPage - 1) * 100}vh)`;
-            wrapper.offsetHeight; // 强制重绘
-            wrapper.style.transition = '';
-            setTimeout(() => { modalJustClosed = false; }, 500);
+            setTimeout(() => {
+                wrapper.style.transition = 'none';
+                wrapper.style.transform = `translateY(-${(currentPage - 1) * 100}vh)`;
+                setTimeout(() => {
+                    wrapper.style.transition = '';
+                    modalJustClosed = false;
+                }, 50);
+            }, 300);
         }
 
         // 点击弹窗外部关闭
