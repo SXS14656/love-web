@@ -2753,6 +2753,63 @@
         </div>
     </section>
 
+    <!-- 第四页：我们的回忆 -->
+    <section class="page page-4" id="page4">
+        <div class="content">
+            <div class="page-4-title">Our Memories</div>
+            <p class="page-4-subtitle">记录我们的点点滴滴</p>
+
+            <!-- 功能切换标签 -->
+            <div class="tabs-container">
+                <div class="tab active" data-tab="watched" onclick="switchMemoryTab('watched')">看过</div>
+                <div class="tab" data-tab="been" onclick="switchMemoryTab('been')">去过</div>
+                <div class="tab" data-tab="wantWatch" onclick="switchMemoryTab('wantWatch')">想看</div>
+                <div class="tab" data-tab="wantGo" onclick="switchMemoryTab('wantGo')">想去</div>
+            </div>
+
+            <!-- 看过的电影 -->
+            <div class="tab-content active" id="watchedTab">
+                <button class="create-btn" onclick="showAddMemory('watched')">+ 添加看过的电影</button>
+                <div class="memory-list" id="watchedList"></div>
+            </div>
+
+            <!-- 去过的地方 -->
+            <div class="tab-content" id="beenTab">
+                <button class="create-btn" onclick="showAddMemory('been')">+ 添加去过的地方</button>
+                <div class="memory-list" id="beenList"></div>
+            </div>
+
+            <!-- 想看的电影 -->
+            <div class="tab-content" id="wantWatchTab">
+                <button class="create-btn" onclick="showAddMemory('wantWatch')">+ 添加想看的电影</button>
+                <div class="memory-list" id="wantWatchList"></div>
+            </div>
+
+            <!-- 想去的地方 -->
+            <div class="tab-content" id="wantGoTab">
+                <button class="create-btn" onclick="showAddMemory('wantGo')">+ 添加想去的地方</button>
+                <div class="memory-list" id="wantGoList"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第五页：星座运势 -->
+    <section class="page page-5" id="page5">
+        <div class="content">
+            <div class="page-5-title">Daily Horoscope</div>
+            <p class="page-5-subtitle">今日星座运势</p>
+            <div class="horoscope-container" id="horoscopeContainer"></div>
+        </div>
+    </section>
+
+    </div><!-- end pages-wrapper -->
+
+    <!-- 许愿消息弹窗 -->
+    <div class="wish-message" id="wishMessage">
+        <div class="wish-text" id="wishText"></div>
+        <div class="wish-close" id="wishCloseBtn">×</div>
+    </div>
+
     <!-- 创建时光胶囊弹窗 -->
     <div class="modal" id="createCapsuleModal">
         <div class="modal-box">
@@ -2846,46 +2903,6 @@
         </div>
     </div>
 
-    <!-- 第四页：我们的回忆 -->
-    <section class="page page-4" id="page4">
-        <div class="content">
-            <div class="page-4-title">Our Memories</div>
-            <p class="page-4-subtitle">记录我们的点点滴滴</p>
-
-            <!-- 功能切换标签 -->
-            <div class="tabs-container">
-                <div class="tab active" data-tab="watched" onclick="switchMemoryTab('watched')">看过</div>
-                <div class="tab" data-tab="been" onclick="switchMemoryTab('been')">去过</div>
-                <div class="tab" data-tab="wantWatch" onclick="switchMemoryTab('wantWatch')">想看</div>
-                <div class="tab" data-tab="wantGo" onclick="switchMemoryTab('wantGo')">想去</div>
-            </div>
-
-            <!-- 看过的电影 -->
-            <div class="tab-content active" id="watchedTab">
-                <button class="create-btn" onclick="showAddMemory('watched')">+ 添加看过的电影</button>
-                <div class="memory-list" id="watchedList"></div>
-            </div>
-
-            <!-- 去过的地方 -->
-            <div class="tab-content" id="beenTab">
-                <button class="create-btn" onclick="showAddMemory('been')">+ 添加去过的地方</button>
-                <div class="memory-list" id="beenList"></div>
-            </div>
-
-            <!-- 想看的电影 -->
-            <div class="tab-content" id="wantWatchTab">
-                <button class="create-btn" onclick="showAddMemory('wantWatch')">+ 添加想看的电影</button>
-                <div class="memory-list" id="wantWatchList"></div>
-            </div>
-
-            <!-- 想去的地方 -->
-            <div class="tab-content" id="wantGoTab">
-                <button class="create-btn" onclick="showAddMemory('wantGo')">+ 添加想去的地方</button>
-                <div class="memory-list" id="wantGoList"></div>
-            </div>
-        </div>
-    </section>
-
     <!-- 添加回忆弹窗 -->
     <div class="modal" id="addMemoryModal">
         <div class="modal-box">
@@ -2898,23 +2915,6 @@
                 <button class="modal-btn ok" onclick="addMemory()">添加</button>
             </div>
         </div>
-    </div>
-
-    <!-- 第五页：星座运势 -->
-    <section class="page page-5" id="page5">
-        <div class="content">
-            <div class="page-5-title">Daily Horoscope</div>
-            <p class="page-5-subtitle">今日星座运势</p>
-            <div class="horoscope-container" id="horoscopeContainer"></div>
-        </div>
-    </section>
-
-    </div><!-- end pages-wrapper -->
-
-    <!-- 许愿消息弹窗（独立于页面） -->
-    <div class="wish-message" id="wishMessage">
-        <div class="wish-text" id="wishText"></div>
-        <div class="wish-close" id="wishCloseBtn">×</div>
     </div>
 
     <!-- 页面指示器 -->
