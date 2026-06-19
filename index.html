@@ -2965,23 +2965,31 @@
         </button>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" onerror="console.log('Firebase SDK load failed')"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js" onerror="console.log('Firebase DB SDK load failed')"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js" onerror="console.log('Firebase Auth SDK load failed')"></script>
     <script>
         // 初始化 Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyCXthSxgltDHWR7wvvSRFH-hP__M6W1WJw",
-            authDomain: "love-web-67c9d.firebaseapp.com",
-            databaseURL: "https://love-web-67c9d-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "love-web-67c9d",
-            storageBucket: "love-web-67c9d.firebasestorage.app",
-            messagingSenderId: "215213060079",
-            appId: "1:215213060079:web:f2aecb3d1cf38885a4d01a"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        const auth = firebase.auth();
+        let db = null;
+        let auth = null;
+        let firebaseReady = false;
+        try {
+            const firebaseConfig = {
+                apiKey: "AIzaSyCXthSxgltDHWR7wvvSRFH-hP__M6W1WJw",
+                authDomain: "love-web-67c9d.firebaseapp.com",
+                databaseURL: "https://love-web-67c9d-default-rtdb.asia-southeast1.firebasedatabase.app",
+                projectId: "love-web-67c9d",
+                storageBucket: "love-web-67c9d.firebasestorage.app",
+                messagingSenderId: "215213060079",
+                appId: "1:215213060079:web:f2aecb3d1cf38885a4d01a"
+            };
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            auth = firebase.auth();
+            firebaseReady = true;
+        } catch(e) {
+            console.log('Firebase init failed:', e);
+        }
     </script>
     <script>
         // ============ 计时器 ============
@@ -3630,6 +3638,12 @@
 
         // 从 Firebase 加载数据（先匿名登录）
         function loadData() {
+            if (!firebaseReady) {
+                updateCapsulesList();
+                updateLettersList();
+                updateMemoryLists();
+                return;
+            }
             auth.signInAnonymously().then(() => {
                 db.ref('loveData').on('value', (snapshot) => {
                     const data = snapshot.val();
@@ -3656,9 +3670,10 @@
 
         // 保存数据到 Firebase
         function saveData() {
+            if (!firebaseReady) return;
             db.ref('loveData').set(localData).catch((error) => {
                 console.log('Save failed:', error);
-            }
+            });
         }
 
         // 切换标签（第三页）
