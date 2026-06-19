@@ -906,6 +906,13 @@
             font-size: 0.75em;
         }
 
+        .capsule-empty,
+        .letter-empty {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 20px;
+        }
+
         /* 回复样式 */
         .reply-divider {
             height: 1px;
@@ -1330,6 +1337,216 @@
             font-size: 1em;
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 30px;
+        }
+
+        /* 第六页样式 - 星座运势 */
+        .page-6 {
+            background: linear-gradient(135deg, #0c0c1d 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .page-6-title {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 107, 129, 0.5);
+        }
+
+        .page-6-subtitle {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+        }
+
+        .horoscope-container {
+            display: flex;
+            gap: 20px;
+            width: 90%;
+            max-width: 700px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .horoscope-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            width: 300px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            text-align: left;
+        }
+
+        .horoscope-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .horoscope-icon {
+            font-size: 2.5em;
+        }
+
+        .horoscope-name {
+            font-size: 1.3em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .horoscope-date {
+            font-size: 0.75em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 2px;
+        }
+
+        .horoscope-stars {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 8px;
+        }
+
+        .horoscope-star {
+            color: #ffc107;
+            font-size: 1em;
+        }
+
+        .horoscope-star.empty {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .horoscope-label {
+            font-size: 0.8em;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 3px;
+        }
+
+        .horoscope-text {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .horoscope-love {
+            background: rgba(255, 107, 129, 0.1);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .horoscope-love-title {
+            font-size: 0.8em;
+            color: #ff6b81;
+            margin-bottom: 5px;
+        }
+
+        .horoscope-love-text {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.75);
+            line-height: 1.5;
+        }
+
+        .horoscope-footer {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 12px;
+        }
+
+        .horoscope-luck {
+            text-align: center;
+            flex: 1;
+        }
+
+        .horoscope-luck-label {
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 4px;
+        }
+
+        .horoscope-luck-value {
+            font-size: 0.9em;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .horoscope-advice {
+            text-align: center;
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .horoscope-advice-label {
+            font-size: 0.7em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 5px;
+        }
+
+        .horoscope-advice-text {
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 白天时星座运势适配 */
+        body.daytime .page-6 {
+            background: linear-gradient(135deg, #dfe6e9 0%, #a8d8ea 50%, #74b9ff 100%);
+        }
+
+        body.daytime .horoscope-card {
+            background: rgba(255, 255, 255, 0.7);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body.daytime .horoscope-name {
+            color: rgba(0, 0, 0, 0.85);
+        }
+
+        body.daytime .horoscope-date {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        body.daytime .horoscope-star.empty {
+            color: rgba(0, 0, 0, 0.15);
+        }
+
+        body.daytime .horoscope-label {
+            color: rgba(0, 0, 0, 0.45);
+        }
+
+        body.daytime .horoscope-text {
+            color: rgba(0, 0, 0, 0.75);
+        }
+
+        body.daytime .horoscope-love {
+            background: rgba(255, 107, 129, 0.1);
+        }
+
+        body.daytime .horoscope-love-title {
+            color: #e84393;
+        }
+
+        body.daytime .horoscope-love-text {
+            color: rgba(0, 0, 0, 0.65);
+        }
+
+        body.daytime .horoscope-luck-label {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        body.daytime .horoscope-luck-value {
+            color: rgba(0, 0, 0, 0.75);
+        }
+
+        body.daytime .horoscope-advice {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.daytime .horoscope-advice-label {
+            color: rgba(0, 0, 0, 0.4);
+        }
+
+        body.daytime .horoscope-advice-text {
+            color: rgba(0, 0, 0, 0.65);
         }
 
         /* 游戏选择界面 */
@@ -2038,6 +2255,20 @@
                 max-height: 40vh;
             }
 
+            .page-6-title {
+                font-size: 1.8em;
+            }
+
+            .horoscope-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .horoscope-card {
+                width: 90%;
+                max-width: 300px;
+            }
+
             .game-card {
                 width: 140px;
                 padding: 15px;
@@ -2302,7 +2533,8 @@
         body.daytime .page-2-title,
         body.daytime .page-3-title,
         body.daytime .page-4-title,
-        body.daytime .page-5-title {
+        body.daytime .page-5-title,
+        body.daytime .page-6-title {
             text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
@@ -2321,14 +2553,16 @@
         body.daytime .page-2-title,
         body.daytime .page-3-title,
         body.daytime .page-4-title,
-        body.daytime .page-5-title {
+        body.daytime .page-5-title,
+        body.daytime .page-6-title {
             color: #2d3436;
         }
 
         body.daytime .page-2-subtitle,
         body.daytime .page-3-subtitle,
         body.daytime .page-4-subtitle,
-        body.daytime .page-5-subtitle {
+        body.daytime .page-5-subtitle,
+        body.daytime .page-6-subtitle {
             color: rgba(0, 0, 0, 0.5);
         }
 
@@ -2417,6 +2651,11 @@
         }
 
         body.daytime .letter-hint {
+            color: rgba(0, 0, 0, 0.25);
+        }
+
+        body.daytime .capsule-empty,
+        body.daytime .letter-empty {
             color: rgba(0, 0, 0, 0.25);
         }
 
@@ -3069,6 +3308,15 @@
         </div>
     </div>
 
+    <!-- 第六页：星座运势 -->
+    <section class="page page-6" id="page6">
+        <div class="content">
+            <div class="page-6-title">Daily Horoscope</div>
+            <p class="page-6-subtitle">今日星座运势</p>
+            <div class="horoscope-container" id="horoscopeContainer"></div>
+        </div>
+    </section>
+
     <!-- 页面指示器 -->
     <div class="page-indicator" id="pageIndicator">
         <div class="indicator-dot active" data-page="1" onclick="scrollToPage(1)"></div>
@@ -3076,6 +3324,7 @@
         <div class="indicator-dot" data-page="3" onclick="scrollToPage(3)"></div>
         <div class="indicator-dot" data-page="4" onclick="scrollToPage(4)"></div>
         <div class="indicator-dot" data-page="5" onclick="scrollToPage(5)"></div>
+        <div class="indicator-dot" data-page="6" onclick="scrollToPage(6)"></div>
     </div>
 
     <!-- 音乐播放器 -->
@@ -3230,7 +3479,7 @@
 
         // ============ 页面滚动 ============
         let currentPage = 1;
-        const totalPages = 5;
+        const totalPages = 6;
 
         function scrollToPage(page) {
             const target = document.getElementById(`page${page}`);
@@ -3819,7 +4068,7 @@
             list.innerHTML = '';
 
             if (localData.capsules.length === 0) {
-                list.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px;">还没有时光胶囊</div>';
+                list.innerHTML = '<div class="capsule-empty">还没有时光胶囊</div>';
                 return;
             }
 
@@ -3962,7 +4211,7 @@
             list.innerHTML = '';
 
             if (localData.letters.length === 0) {
-                list.innerHTML = '<div style="text-align: center; color: rgba(255,255,255,0.4); padding: 20px;">还没有悄悄话</div>';
+                list.innerHTML = '<div class="letter-empty">还没有悄悄话</div>';
                 return;
             }
 
@@ -4566,7 +4815,168 @@
             if (e.key === 'ArrowRight') moveCatchPaddle('right');
         });
 
-        // 添加第四页的移动控制按钮样式
+        // ============ 星座运势 ============
+        const zodiacSigns = [
+            { name: '白羊座', symbol: '♈', dates: '3.21-4.19', element: '火' },
+            { name: '金牛座', symbol: '♉', dates: '4.20-5.20', element: '土' },
+            { name: '双子座', symbol: '♊', dates: '5.21-6.21', element: '风' },
+            { name: '巨蟹座', symbol: '♋', dates: '6.22-7.22', element: '水' },
+            { name: '狮子座', symbol: '♌', dates: '7.23-8.22', element: '火' },
+            { name: '处女座', symbol: '♍', dates: '8.23-9.22', element: '土' },
+            { name: '天秤座', symbol: '♎', dates: '9.23-10.23', element: '风' },
+            { name: '天蝎座', symbol: '♏', dates: '10.24-11.22', element: '水' },
+            { name: '射手座', symbol: '♐', dates: '11.23-12.21', element: '火' },
+            { name: '摩羯座', symbol: '♑', dates: '12.22-1.19', element: '土' },
+            { name: '水瓶座', symbol: '♒', dates: '1.20-2.18', element: '风' },
+            { name: '双鱼座', symbol: '♓', dates: '2.19-3.20', element: '水' }
+        ];
+
+        const horoscopeData = {
+            general: [
+                '今天运势不错，适合处理重要事务，会有意外收获。',
+                '今天适合与人合作，团队协作能带来好结果。',
+                '今天思维活跃，创意灵感不断，适合学习新知识。',
+                '今天情绪稳定，适合做长远规划和思考。',
+                '今天社交运佳，可能会结识有趣的新朋友。',
+                '今天适合休息放松，给自己充充电。',
+                '今天财运不错，可能会有小额收入。',
+                '今天适合运动锻炼，身体状态会很好。',
+                '今天工作效率高，能完成不少任务。',
+                '今天适合陪伴家人，家庭关系会更融洽。',
+                '今天直觉敏锐，相信自己的第一感觉。',
+                '今天适合整理环境，清理杂物会带来好心情。',
+                '今天贵人运旺，会得到他人的帮助。',
+                '今天适合表达感情，说出心里话。',
+                '今天创造力强，适合做艺术相关的事。'
+            ],
+            love: [
+                '感情运势上升，单身者有机会遇到心仪对象。',
+                '恋爱中的人感情甜蜜，适合制造浪漫惊喜。',
+                '桃花运旺盛，可能会收到表白或示好。',
+                '感情稳定，适合和伴侣深入交流。',
+                '今天魅力十足，容易吸引异性的目光。',
+                '适合主动出击，向喜欢的人表达心意。',
+                '感情中需要多一些耐心和理解。',
+                '今天适合约会，会有美好的回忆。',
+                '单身者可以多参加社交活动，有机会脱单。',
+                '恋爱中的人可以计划一次小旅行。',
+                '今天适合写情书或发甜蜜消息。',
+                '感情中有小惊喜，保持期待。',
+                '今天适合和伴侣一起做喜欢的事。',
+                '桃花运一般，但已有感情会更稳定。',
+                '感情中需要给对方一些空间。'
+            ],
+            advice: [
+                '保持微笑，好运自然来。',
+                '多喝水，注意身体健康。',
+                '今天适合穿亮色衣服。',
+                '给家人打个电话，温暖彼此。',
+                '记录下今天的美好瞬间。',
+                '尝试一件没做过的事。',
+                '对身边的人说声谢谢。',
+                '今天适合听轻松的音乐。',
+                '给自己买个小礼物奖励自己。',
+                '早点休息，明天会更好。',
+                '今天适合散步放松心情。',
+                '和朋友分享你的快乐。',
+                '保持好奇心，探索新事物。',
+                '今天适合阅读一本好书。',
+                '感恩生活中的小确幸。'
+            ],
+            colors: ['红色', '蓝色', '绿色', '紫色', '粉色', '橙色', '白色', '金色', '银色', '青色', '黄色', '玫红色'],
+            numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+        };
+
+        function getZodiacIndex(month, day) {
+            const dates = [
+                [3, 21], [4, 20], [5, 21], [6, 22], [7, 23], [8, 23],
+                [9, 23], [10, 24], [11, 23], [12, 22], [1, 20], [2, 19]
+            ];
+            for (let i = 11; i >= 0; i--) {
+                if (month === dates[i][0] && day >= dates[i][1]) return i;
+                if (month > dates[i][0] && i < 11) return i + 1;
+            }
+            return 0;
+        }
+
+        function getDailySeed(zodiacIndex) {
+            const today = new Date();
+            const dateStr = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+            return (dateStr * 13 + zodiacIndex * 7) % 1000;
+        }
+
+        function getHoroscope(zodiacIndex) {
+            const seed = getDailySeed(zodiacIndex);
+            const generalIndex = seed % horoscopeData.general.length;
+            const loveIndex = (seed * 3 + 5) % horoscopeData.love.length;
+            const adviceIndex = (seed * 7 + 11) % horoscopeData.advice.length;
+            const colorIndex = (seed * 11 + 13) % horoscopeData.colors.length;
+            const numberIndex = (seed * 17 + 19) % horoscopeData.numbers.length;
+            const stars = 3 + (seed % 3);
+
+            return {
+                stars: stars,
+                general: horoscopeData.general[generalIndex],
+                love: horoscopeData.love[loveIndex],
+                advice: horoscopeData.advice[adviceIndex],
+                color: horoscopeData.colors[colorIndex],
+                number: horoscopeData.numbers[numberIndex]
+            };
+        }
+
+        function renderStars(count) {
+            let html = '';
+            for (let i = 0; i < 5; i++) {
+                html += `<span class="horoscope-star ${i < count ? '' : 'empty'}">★</span>`;
+            }
+            return html;
+        }
+
+        function renderHoroscopeCard(zodiacIndex) {
+            const sign = zodiacSigns[zodiacIndex];
+            const horoscope = getHoroscope(zodiacIndex);
+
+            return `
+                <div class="horoscope-card">
+                    <div class="horoscope-header">
+                        <div class="horoscope-icon">${sign.symbol}</div>
+                        <div>
+                            <div class="horoscope-name">${sign.name}</div>
+                            <div class="horoscope-date">${sign.dates}</div>
+                        </div>
+                    </div>
+                    <div class="horoscope-label">综合运势</div>
+                    <div class="horoscope-stars">${renderStars(horoscope.stars)}</div>
+                    <div class="horoscope-text">${horoscope.general}</div>
+                    <div class="horoscope-love">
+                        <div class="horoscope-love-title">❤ 爱情运势</div>
+                        <div class="horoscope-love-text">${horoscope.love}</div>
+                    </div>
+                    <div class="horoscope-footer">
+                        <div class="horoscope-luck">
+                            <div class="horoscope-luck-label">幸运数字</div>
+                            <div class="horoscope-luck-value">${horoscope.number}</div>
+                        </div>
+                        <div class="horoscope-luck">
+                            <div class="horoscope-luck-label">幸运颜色</div>
+                            <div class="horoscope-luck-value">${horoscope.color}</div>
+                        </div>
+                    </div>
+                    <div class="horoscope-advice">
+                        <div class="horoscope-advice-label">今日建议</div>
+                        <div class="horoscope-advice-text">${horoscope.advice}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initHoroscope() {
+            const container = document.getElementById('horoscopeContainer');
+            // 双子座(index 2) 和 巨蟹座(index 3)
+            container.innerHTML = renderHoroscopeCard(2) + renderHoroscopeCard(3);
+        }
+
+        initHoroscope();
     </script>
 </body>
 </html>
