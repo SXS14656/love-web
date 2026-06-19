@@ -4052,6 +4052,10 @@
         // 关闭弹窗
         function closeModal(id) {
             document.getElementById(id).classList.remove('show');
+            // 关闭弹窗后确保页面位置正确（防止手机键盘收起导致偏移）
+            setTimeout(() => {
+                wrapper.style.transform = `translateY(-${(currentPage - 1) * 100}vh)`;
+            }, 100);
         }
 
         // 点击弹窗外部关闭
