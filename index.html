@@ -1674,6 +1674,28 @@
             to { transform: rotate(360deg); }
         }
 
+        .music-loading {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 12px;
+            padding: 2px 0 8px;
+        }
+        .music-loading.show { display: flex; }
+        .loading-spinner {
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-top-color: #ff6b81;
+            border-radius: 50%;
+            animation: loadingSpin 0.8s linear infinite;
+        }
+        @keyframes loadingSpin {
+            to { transform: rotate(360deg); }
+        }
+
         .music-panel {
             position: absolute;
             bottom: 70px;
@@ -2931,6 +2953,7 @@
     <div class="music-player">
         <div class="music-panel" id="musicPanel">
             <div class="music-panel-title">Music Player</div>
+            <div class="music-loading" id="musicLoading"><span class="loading-spinner"></span>加载中…</div>
             <div class="music-list" id="musicList"></div>
             <div class="playback-controls">
                 <button class="control-btn" onclick="playPrev()">
@@ -3265,28 +3288,31 @@
         });
 
         // ============ 音乐播放器 ============
+        // 音乐走 jsDelivr CDN（国内访问比 GitHub Pages 快 30+ 倍），加载失败自动回退 GitHub Pages
+        const MUSIC_CDN = 'https://cdn.jsdelivr.net/gh/SXS14656/love-web@main/music/';
         const musicList = [
-            { name: "勾指起誓", artist: "洛天依 & ilem", url: "music/洛天依&ilem-勾指起誓.mp3" },
-            { name: "心跳", artist: "王力宏", url: "music/王力宏 - 心跳.mp3" },
-            { name: "我们的歌", artist: "王力宏", url: "music/王力宏 - 我们的歌.mp3" },
-            { name: "若把你", artist: "Kirsty刘瑾睿", url: "music/Kirsty刘瑾睿 - 若把你.mp3" },
-            { name: "带我去找夜生活", artist: "告五人", url: "music/告五人 - 带我去找夜生活.mp3" },
-            { name: "等你下课", artist: "周杰伦", url: "music/周杰伦 - 等你下课.mp3" },
-            { name: "那时雨", artist: "徐良", url: "music/徐良 - 那时雨.mp3" },
-            { name: "你的目光", artist: "Alec Benjamin", url: "music/Alec Benjamin-你的目光.mp3" },
-            { name: "心许百年", artist: "王天戈", url: "music/王天戈-心许百年.mp3" }
+            { name: "勾指起誓", artist: "洛天依 & ilem", url: MUSIC_CDN + "洛天依&ilem-勾指起誓.mp3" },
+            { name: "心跳", artist: "王力宏", url: MUSIC_CDN + "王力宏 - 心跳.mp3" },
+            { name: "我们的歌", artist: "王力宏", url: MUSIC_CDN + "王力宏 - 我们的歌.mp3" },
+            { name: "若把你", artist: "Kirsty刘瑾睿", url: MUSIC_CDN + "Kirsty刘瑾睿 - 若把你.mp3" },
+            { name: "带我去找夜生活", artist: "告五人", url: MUSIC_CDN + "告五人 - 带我去找夜生活.mp3" },
+            { name: "等你下课", artist: "周杰伦", url: MUSIC_CDN + "周杰伦 - 等你下课.mp3" },
+            { name: "那时雨", artist: "徐良", url: MUSIC_CDN + "徐良 - 那时雨.mp3" },
+            { name: "你的目光", artist: "Alec Benjamin", url: MUSIC_CDN + "Alec Benjamin-你的目光.mp3" },
+            { name: "心许百年", artist: "王天戈", url: MUSIC_CDN + "王天戈-心许百年.mp3" }
         ];
 
         let currentMusicIndex = 0;
         let audio = null;
         let isPlaying = false;
         let isPanelOpen = false;
+        let currentFallback = null;  // CDN 失败时的 GitHub Pages 兜底地址
 
         function initMusicPlayer() {
             audio = new Audio();
             audio.volume = 0.8;
             audio.loop = true;
-            audio.preload = 'metadata';
+            audio.preload = 'auto';
 
             const musicListEl = document.getElementById('musicList');
             musicList.forEach((music, index) => {
@@ -3318,15 +3344,42 @@
             }, { passive: true });
 
             audio.addEventListener('ended', () => playMusic((currentMusicIndex + 1) % musicList.length));
+            audio.addEventListener('waiting', () => setMusicLoading(true));
+            audio.addEventListener('stalled', () => setMusicLoading(true));
+            audio.addEventListener('playing', () => setMusicLoading(false));
+            audio.addEventListener('canplay', () => setMusicLoading(false));
+            // CDN 加载失败时回退到 GitHub Pages 直连（慢，但至少能播）
+            audio.addEventListener('error', () => {
+                if (currentFallback) {
+                    console.log('CDN 加载失败，回退 GitHub Pages:', currentFallback);
+                    const fb = currentFallback;
+                    currentFallback = null;
+                    audio.src = fb;
+                    audio.play().catch(() => setMusicLoading(false));
+                } else {
+                    setMusicLoading(false);
+                }
+            });
+        }
+
+        // 显示/隐藏"加载中"提示（网络慢、缓冲时给用户反馈）
+        function setMusicLoading(loading) {
+            const el = document.getElementById('musicLoading');
+            if (el) el.classList.toggle('show', loading);
         }
 
         function playMusic(index) {
             currentMusicIndex = index;
+            setMusicLoading(true);
+            currentFallback = musicList[index].url.replace(MUSIC_CDN, 'music/');
             audio.src = musicList[index].url;
             audio.play().then(() => {
                 isPlaying = true;
                 updatePlayerUI();
-            }).catch(err => console.log('Play failed:', err));
+            }).catch(err => {
+                console.log('Play failed:', err);
+                setMusicLoading(false);
+            });
         }
 
         function togglePlay() {
@@ -3376,6 +3429,14 @@
             if (isPanelOpen) {
                 panel.classList.add('show');
                 if (!audio) initMusicPlayer();
+                // 打开面板时预加载第一首，点播放能更快出声（不会自动播放）
+                if (audio && !audio.src && !isPlaying) {
+                    currentMusicIndex = 0;
+                    currentFallback = musicList[0].url.replace(MUSIC_CDN, 'music/');
+                    audio.src = musicList[0].url;
+                    audio.load();
+                    updatePlayerUI();
+                }
             } else {
                 panel.classList.remove('show');
             }
