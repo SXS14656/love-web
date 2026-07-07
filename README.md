@@ -6,15 +6,13 @@ Static GitHub Pages birthday page from CZG to LFY.
 
 1. Put MP3 files in `assets/music/`.
 2. Open `script.js`.
-3. Update `pageConfig.playlist`:
+3. Update `pageConfig.birthdaySong`:
 
 ```js
-playlist: [
-  { title: "生日快乐", artist: "CZG", src: "assets/music/happy-birthday.mp3" }
-]
+birthdaySong: "assets/music/happy-birthday.mp3"
 ```
 
-Browsers block autoplay, so music starts after the visitor clicks the play button or opens the surprise.
+Browsers block autoplay, so music starts after the visitor clicks `打开惊喜`.
 
 ## Gift Card
 

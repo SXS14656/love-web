@@ -1,13 +1,10 @@
 const pageConfig = {
-  couple: { from: "CZG", to: "LFY" },
-  birthday: { date: "2026-07-28", mode: "fixed" },
-  playlist: [
-    { title: "生日快乐", artist: "CZG 给小颖宝宝", src: "assets/music/happy-birthday.mp3" }
-  ],
+  birthday: { date: "2026-07-07" },
+  birthdaySong: "assets/music/happy-birthday.mp3",
   giftCard: {
     unlockCode: "0226",
-    cardNumber: "请在 script.js 里填写卡号",
-    cardPassword: "请在 script.js 里填写卡密"
+    cardNumber: "3101300269912365699",
+    cardPassword: "通过微信发送语音“我喜欢你”获取。🤭"
   }
 };
 
@@ -24,7 +21,6 @@ const birthdayRevealMessage = $("#birthdayRevealMessage");
 const gatedSections = document.querySelectorAll("[data-birthday-gated]");
 
 const birthdayDate = new Date(`${pageConfig.birthday.date}T00:00:00+08:00`);
-const birthdayEnd = new Date(`${pageConfig.birthday.date}T23:59:59+08:00`);
 const localPreviewHosts = new Set(["", "localhost", "127.0.0.1", "::1"]);
 const previewParams = new URLSearchParams(window.location.search);
 const isPreviewMode = localPreviewHosts.has(window.location.hostname) && previewParams.get("preview") === "1";
@@ -46,41 +42,17 @@ function pad(value) {
   return String(value).padStart(2, "0");
 }
 
-function formatTime(seconds) {
-  if (!Number.isFinite(seconds)) return "0:00";
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${mins}:${pad(secs)}`;
-}
-
 function updateCountdown(now = new Date()) {
   const diff = birthdayDate.getTime() - now.getTime();
   updateBirthdayGate(now);
 
-  if (isPreviewMode) {
+  if (isBirthdayUnlocked(now)) {
     countdownEls.days.textContent = "00";
     countdownEls.hours.textContent = "00";
     countdownEls.minutes.textContent = "00";
     countdownEls.seconds.textContent = "00";
-    countdownEls.note.textContent = "本地预览模式：惊喜已临时解锁";
-    return;
-  }
-
-  if (now <= birthdayEnd && diff <= 0) {
-    countdownEls.days.textContent = "00";
-    countdownEls.hours.textContent = "00";
-    countdownEls.minutes.textContent = "00";
-    countdownEls.seconds.textContent = "00";
-    countdownEls.note.textContent = "今天就是 LFY 的生日，愿所有祝福都准时抵达";
-    return;
-  }
-
-  if (diff < 0) {
-    countdownEls.days.textContent = "00";
-    countdownEls.hours.textContent = "00";
-    countdownEls.minutes.textContent = "00";
-    countdownEls.seconds.textContent = "00";
-    countdownEls.note.textContent = "这份生日惊喜已经送达，祝 LFY 新一岁闪闪发光";
+    countdownEls.note.hidden = true;
+    countdownEls.note.textContent = "";
     return;
   }
 
@@ -94,6 +66,7 @@ function updateCountdown(now = new Date()) {
   countdownEls.hours.textContent = pad(hours);
   countdownEls.minutes.textContent = pad(minutes);
   countdownEls.seconds.textContent = pad(seconds);
+  countdownEls.note.hidden = false;
   countdownEls.note.textContent = `距离 ${pageConfig.birthday.date} 还有`;
 }
 
@@ -102,6 +75,18 @@ setInterval(updateCountdown, 1000);
 
 const toast = $("#toast");
 let toastTimer;
+
+document.addEventListener("copy", (event) => {
+  const selection = window.getSelection();
+  const selectedNode = selection && selection.anchorNode;
+  const selectedElement = selectedNode && selectedNode.nodeType === Node.TEXT_NODE
+    ? selectedNode.parentElement
+    : selectedNode;
+
+  if (!selectedElement || !selectedElement.closest(".copy-allowed")) {
+    event.preventDefault();
+  }
+});
 
 function showToast(message) {
   toast.textContent = message;
@@ -169,21 +154,6 @@ $("#openSurprise").addEventListener("click", () => {
 });
 
 const audio = $("#audio");
-let currentTrackIndex = 0;
-
-function currentTrack() {
-  return pageConfig.playlist[currentTrackIndex] || pageConfig.playlist[0];
-}
-
-function hasPlayableTrack(track = currentTrack()) {
-  return Boolean(track && track.src && track.src.trim());
-}
-
-function loadTrack(index) {
-  currentTrackIndex = (index + pageConfig.playlist.length) % pageConfig.playlist.length;
-  const track = currentTrack();
-  audio.src = hasPlayableTrack(track) ? track.src : "";
-}
 
 async function playCurrentTrack() {
   if (!isBirthdayUnlocked()) {
@@ -191,9 +161,8 @@ async function playCurrentTrack() {
     return;
   }
 
-  const track = currentTrack();
-  if (!hasPlayableTrack(track)) {
-    showToast("先把歌曲放进 assets/music/，再更新 playlist 里的 src。");
+  if (!pageConfig.birthdaySong) {
+    showToast("先把生日歌放进 assets/music/，再更新 birthdaySong。");
     return;
   }
 
@@ -211,7 +180,7 @@ audio.addEventListener("error", () => {
 
 audio.volume = 0.72;
 audio.loop = true;
-loadTrack(0);
+audio.src = pageConfig.birthdaySong;
 
 const skyCanvas = $("#skyCanvas");
 const skyCtx = skyCanvas.getContext("2d");
@@ -226,6 +195,8 @@ let height = 0;
 let animationFrame;
 let fireworksTimer;
 let sparklerTimer;
+let fireworksActive = false;
+let resumeFireworksOnVisible = false;
 
 function resizeCanvas() {
   const ratio = window.devicePixelRatio || 1;
@@ -253,6 +224,8 @@ function resizeCanvas() {
 }
 
 function launchBurst(x, y, amount = 26) {
+  if (document.hidden) return;
+
   for (let i = 0; i < amount; i += 1) {
     const angle = (Math.PI * 2 * i) / amount + Math.random() * 0.24;
     const speed = Math.random() * 4 + 2.2;
@@ -267,6 +240,10 @@ function launchBurst(x, y, amount = 26) {
       color: Math.random() > 0.5 ? [255, 127, 176] : [244, 201, 107]
     });
   }
+
+  if (particles.length > 420) {
+    particles.splice(0, particles.length - 420);
+  }
 }
 
 function launchRandomFirework() {
@@ -276,6 +253,8 @@ function launchRandomFirework() {
 }
 
 function launchSparkler(x, y, direction = 1) {
+  if (document.hidden) return;
+
   sparklerSticks.push({ x, y, direction, life: 42, maxLife: 42 });
 
   for (let i = 0; i < 54; i += 1) {
@@ -291,6 +270,10 @@ function launchSparkler(x, y, direction = 1) {
       color: Math.random() > 0.2 ? [255, 214, 112] : [255, 248, 224]
     });
   }
+
+  if (sparklerParticles.length > 520) {
+    sparklerParticles.splice(0, sparklerParticles.length - 520);
+  }
 }
 
 function launchRandomSparkler() {
@@ -303,6 +286,7 @@ function launchRandomSparkler() {
 function startFireworksShow() {
   if (fireworksTimer) return;
 
+  fireworksActive = true;
   launchBurst(width / 2, height * 0.34, 54);
   launchRandomSparkler();
   setTimeout(launchRandomFirework, 380);
@@ -311,6 +295,35 @@ function startFireworksShow() {
 
   fireworksTimer = setInterval(launchRandomFirework, 1350);
   sparklerTimer = setInterval(launchRandomSparkler, 620);
+}
+
+function clearFireworkParticles() {
+  particles = [];
+  sparklerParticles = [];
+  sparklerSticks = [];
+  burstCtx.clearRect(0, 0, width, height);
+}
+
+function stopFireworksTimers() {
+  clearInterval(fireworksTimer);
+  clearInterval(sparklerTimer);
+  fireworksTimer = undefined;
+  sparklerTimer = undefined;
+}
+
+function pauseFireworksForBackground() {
+  resumeFireworksOnVisible = fireworksActive;
+  stopFireworksTimers();
+  clearFireworkParticles();
+}
+
+function resumeFireworksFromBackground() {
+  clearFireworkParticles();
+
+  if (resumeFireworksOnVisible) {
+    resumeFireworksOnVisible = false;
+    startFireworksShow();
+  }
 }
 
 function drawSky() {
@@ -392,8 +405,14 @@ function animate() {
 resizeCanvas();
 animate();
 window.addEventListener("resize", resizeCanvas);
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    pauseFireworksForBackground();
+  } else {
+    resumeFireworksFromBackground();
+  }
+});
 window.addEventListener("beforeunload", () => {
   cancelAnimationFrame(animationFrame);
-  clearInterval(fireworksTimer);
-  clearInterval(sparklerTimer);
+  stopFireworksTimers();
 });
