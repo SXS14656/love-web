@@ -1,5 +1,5 @@
 const pageConfig = {
-  birthday: { date: "2026-07-07" },
+  birthday: { date: "2026-07-28" },
   birthdaySong: "https://cdn.jsdelivr.net/gh/SXS14656/love-web@main/assets/music/happy-birthday.mp3",
   giftCard: {
     unlockCode: "0226",
