@@ -115,8 +115,7 @@ button {
   overflow: hidden;
 }
 
-.hero::before,
-.hero::after {
+.hero::before {
   position: absolute;
   pointer-events: none;
   content: "";
@@ -133,10 +132,6 @@ button {
   mix-blend-mode: screen;
   transform: rotate(-7deg);
   animation: heroAurora 13s ease-in-out infinite alternate;
-}
-
-.hero::after {
-  display: none;
 }
 
 .hero__media,

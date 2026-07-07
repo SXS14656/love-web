@@ -146,7 +146,6 @@ $("#openSurprise").addEventListener("click", () => {
   }
 
   updateBirthdayGate();
-  document.body.classList.add("surprise-opened");
   showToast("亲爱的小颖宝宝生日快乐！今晚的星星都在为你闪烁！");
   playCurrentTrack();
   startFireworksShow();
