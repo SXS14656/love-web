@@ -1,6 +1,6 @@
 const pageConfig = {
   couple: { from: "CZG", to: "LFY" },
-  birthday: { date: "2026-07-07", mode: "fixed" },
+  birthday: { date: "2026-07-28", mode: "fixed" },
   playlist: [
     { title: "生日快乐", artist: "CZG 给小颖宝宝", src: "assets/music/happy-birthday.mp3" }
   ],
