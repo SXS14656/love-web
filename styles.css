@@ -127,13 +127,13 @@ p {
 h1 {
   margin-bottom: 1rem;
   font-size: clamp(3.2rem, 9vw, 6.8rem);
-  line-height: 0.98;
+  line-height: 1.08;
   letter-spacing: 0;
   text-shadow: 0 0 32px rgba(255, 127, 176, 0.38), 0 12px 42px rgba(0, 0, 0, 0.4);
 }
 
-.hero__title span {
-  display: block;
+.hero__title {
+  white-space: nowrap;
 }
 
 h2 {
@@ -543,6 +543,10 @@ input[type="range"] {
 @media (max-width: 540px) {
   .hero {
     padding-inline: 0.95rem;
+  }
+
+  h1 {
+    font-size: clamp(3rem, 14vw, 4.6rem);
   }
 
   .countdown {
