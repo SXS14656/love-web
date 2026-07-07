@@ -188,6 +188,7 @@ const skyCtx = skyCanvas.getContext("2d");
 const burstCanvas = $("#burstCanvas");
 const burstCtx = burstCanvas.getContext("2d");
 let stars = [];
+let meteors = [];
 let particles = [];
 let sparklerParticles = [];
 let sparklerSticks = [];
@@ -196,11 +197,12 @@ let height = 0;
 let animationFrame;
 let fireworksTimer;
 let sparklerTimer;
+let meteorTimer;
 let fireworksActive = false;
 let resumeFireworksOnVisible = false;
 
 function resizeCanvas() {
-  const ratio = window.devicePixelRatio || 1;
+  const ratio = Math.min(window.devicePixelRatio || 1, 2);
   width = window.innerWidth;
   height = window.innerHeight;
 
@@ -214,14 +216,33 @@ function resizeCanvas() {
   skyCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
   burstCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
 
-  const count = Math.min(210, Math.floor(width * height / 4800));
+  const count = Math.min(260, Math.floor(width * height / 4300));
   stars = Array.from({ length: count }, () => ({
     x: Math.random() * width,
     y: Math.random() * height,
-    r: Math.random() * 1.75 + 0.55,
+    r: Math.random() * 1.9 + 0.55,
     phase: Math.random() * Math.PI * 2,
     speed: Math.random() * 0.02 + 0.008
   }));
+}
+
+function launchMeteor() {
+  if (document.hidden) return;
+
+  const speed = 9.5 + Math.random() * 5;
+  meteors.push({
+    x: width * (0.86 + Math.random() * 0.2),
+    y: height * (0.02 + Math.random() * 0.24),
+    vx: -speed,
+    vy: speed * (0.46 + Math.random() * 0.16),
+    life: 36 + Math.random() * 18,
+    maxLife: 54,
+    length: 130 + Math.random() * 72
+  });
+
+  if (meteors.length > 8) {
+    meteors.splice(0, meteors.length - 8);
+  }
 }
 
 function launchBurst(x, y, amount = 26) {
@@ -327,12 +348,26 @@ function resumeFireworksFromBackground() {
   }
 }
 
+function startMeteorShow() {
+  if (meteorTimer) return;
+
+  meteorTimer = setInterval(launchMeteor, 1800);
+  setTimeout(launchMeteor, 260);
+  setTimeout(launchMeteor, 980);
+}
+
+function stopMeteorShow() {
+  clearInterval(meteorTimer);
+  meteorTimer = undefined;
+  meteors = [];
+}
+
 function drawSky() {
   skyCtx.clearRect(0, 0, width, height);
   stars.forEach((star) => {
     star.phase += star.speed;
-    const alpha = 0.58 + Math.sin(star.phase) * 0.34;
-    skyCtx.shadowBlur = 8;
+    const alpha = 0.5 + Math.sin(star.phase) * 0.38;
+    skyCtx.shadowBlur = 10;
     skyCtx.shadowColor = "rgba(255, 248, 242, 0.9)";
     skyCtx.beginPath();
     skyCtx.fillStyle = `rgba(255, 248, 242, ${alpha})`;
@@ -340,6 +375,60 @@ function drawSky() {
     skyCtx.fill();
   });
   skyCtx.shadowBlur = 0;
+
+  skyCtx.save();
+  skyCtx.globalCompositeOperation = "lighter";
+  for (let i = 0; i < stars.length; i += 18) {
+    const star = stars[i];
+    const next = stars[i + 9];
+    if (!next) continue;
+
+    const distance = Math.hypot(star.x - next.x, star.y - next.y);
+    if (distance > Math.min(width, height) * 0.24) continue;
+
+    skyCtx.beginPath();
+    skyCtx.strokeStyle = "rgba(125, 226, 221, 0.09)";
+    skyCtx.lineWidth = 1;
+    skyCtx.moveTo(star.x, star.y);
+    skyCtx.lineTo(next.x, next.y);
+    skyCtx.stroke();
+  }
+  skyCtx.restore();
+
+  meteors = meteors.filter((meteor) => meteor.life > 0);
+  meteors.forEach((meteor) => {
+    meteor.x += meteor.vx;
+    meteor.y += meteor.vy;
+    meteor.life -= 1;
+
+    const alpha = Math.max(meteor.life / meteor.maxLife, 0);
+    const velocityLength = Math.hypot(meteor.vx, meteor.vy) || 1;
+    const tailX = meteor.x - (meteor.vx / velocityLength) * meteor.length;
+    const tailY = meteor.y - (meteor.vy / velocityLength) * meteor.length;
+    const gradient = skyCtx.createLinearGradient(meteor.x, meteor.y, tailX, tailY);
+    gradient.addColorStop(0, `rgba(255, 248, 242, ${alpha})`);
+    gradient.addColorStop(0.18, `rgba(125, 226, 221, ${alpha * 0.68})`);
+    gradient.addColorStop(0.52, `rgba(255, 127, 176, ${alpha * 0.22})`);
+    gradient.addColorStop(1, "rgba(125, 226, 221, 0)");
+
+    skyCtx.save();
+    skyCtx.globalCompositeOperation = "lighter";
+    skyCtx.strokeStyle = gradient;
+    skyCtx.lineWidth = 2.2;
+    skyCtx.lineCap = "round";
+    skyCtx.shadowColor = "rgba(125, 226, 221, 0.82)";
+    skyCtx.shadowBlur = 16;
+    skyCtx.beginPath();
+    skyCtx.moveTo(meteor.x, meteor.y);
+    skyCtx.lineTo(tailX, tailY);
+    skyCtx.stroke();
+
+    skyCtx.beginPath();
+    skyCtx.fillStyle = `rgba(255, 248, 242, ${alpha})`;
+    skyCtx.arc(meteor.x, meteor.y, 2.4, 0, Math.PI * 2);
+    skyCtx.fill();
+    skyCtx.restore();
+  });
 }
 
 function drawParticles() {
@@ -405,15 +494,19 @@ function animate() {
 
 resizeCanvas();
 animate();
+startMeteorShow();
 window.addEventListener("resize", resizeCanvas);
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {
     pauseFireworksForBackground();
+    stopMeteorShow();
   } else {
     resumeFireworksFromBackground();
+    startMeteorShow();
   }
 });
 window.addEventListener("beforeunload", () => {
   cancelAnimationFrame(animationFrame);
+  stopMeteorShow();
   stopFireworksTimers();
 });
