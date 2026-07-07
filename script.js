@@ -1,6 +1,6 @@
 const pageConfig = {
   birthday: { date: "2026-07-07" },
-  birthdaySong: "assets/music/happy-birthday.mp3",
+  birthdaySong: "https://cdn.jsdelivr.net/gh/SXS14656/love-web@main/assets/music/happy-birthday.mp3",
   giftCard: {
     unlockCode: "0226",
     cardNumber: "3101300269912365699",
@@ -149,8 +149,8 @@ $("#openSurprise").addEventListener("click", () => {
   document.body.classList.add("surprise-opened");
   showToast("亲爱的小颖宝宝生日快乐！今晚的星星都在为你闪烁！");
   playCurrentTrack();
+  startFireworksShow();
   $("#letterSection").scrollIntoView({ behavior: "smooth", block: "start" });
-  setTimeout(startFireworksShow, isMobileViewport() ? 900 : 250);
 });
 
 const audio = $("#audio");
@@ -187,7 +187,6 @@ const skyCanvas = $("#skyCanvas");
 const skyCtx = skyCanvas.getContext("2d");
 const burstCanvas = $("#burstCanvas");
 const burstCtx = burstCanvas.getContext("2d");
-const isMobileViewport = () => window.matchMedia("(max-width: 640px)").matches;
 let stars = [];
 let particles = [];
 let sparklerParticles = [];
@@ -201,7 +200,7 @@ let fireworksActive = false;
 let resumeFireworksOnVisible = false;
 
 function resizeCanvas() {
-  const ratio = isMobileViewport() ? 1 : window.devicePixelRatio || 1;
+  const ratio = window.devicePixelRatio || 1;
   width = window.innerWidth;
   height = window.innerHeight;
 
@@ -215,13 +214,11 @@ function resizeCanvas() {
   skyCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
   burstCtx.setTransform(ratio, 0, 0, ratio, 0, 0);
 
-  const count = isMobileViewport()
-    ? Math.min(80, Math.floor(width * height / 9000))
-    : Math.min(210, Math.floor(width * height / 4800));
+  const count = Math.min(210, Math.floor(width * height / 4800));
   stars = Array.from({ length: count }, () => ({
     x: Math.random() * width,
     y: Math.random() * height,
-    r: Math.random() * (isMobileViewport() ? 1.2 : 1.75) + 0.55,
+    r: Math.random() * 1.75 + 0.55,
     phase: Math.random() * Math.PI * 2,
     speed: Math.random() * 0.02 + 0.008
   }));
@@ -230,9 +227,8 @@ function resizeCanvas() {
 function launchBurst(x, y, amount = 26) {
   if (document.hidden) return;
 
-  const particleCount = isMobileViewport() ? Math.ceil(amount * 0.45) : amount;
-  for (let i = 0; i < particleCount; i += 1) {
-    const angle = (Math.PI * 2 * i) / particleCount + Math.random() * 0.24;
+  for (let i = 0; i < amount; i += 1) {
+    const angle = (Math.PI * 2 * i) / amount + Math.random() * 0.24;
     const speed = Math.random() * 4 + 2.2;
     particles.push({
       x,
@@ -246,9 +242,8 @@ function launchBurst(x, y, amount = 26) {
     });
   }
 
-  const particleLimit = isMobileViewport() ? 150 : 420;
-  if (particles.length > particleLimit) {
-    particles.splice(0, particles.length - particleLimit);
+  if (particles.length > 420) {
+    particles.splice(0, particles.length - 420);
   }
 }
 
@@ -263,8 +258,7 @@ function launchSparkler(x, y, direction = 1) {
 
   sparklerSticks.push({ x, y, direction, life: 42, maxLife: 42 });
 
-  const sparkCount = isMobileViewport() ? 18 : 54;
-  for (let i = 0; i < sparkCount; i += 1) {
+  for (let i = 0; i < 54; i += 1) {
     sparklerParticles.push({
       x,
       y,
@@ -278,9 +272,8 @@ function launchSparkler(x, y, direction = 1) {
     });
   }
 
-  const sparkLimit = isMobileViewport() ? 180 : 520;
-  if (sparklerParticles.length > sparkLimit) {
-    sparklerParticles.splice(0, sparklerParticles.length - sparkLimit);
+  if (sparklerParticles.length > 520) {
+    sparklerParticles.splice(0, sparklerParticles.length - 520);
   }
 }
 
@@ -295,16 +288,14 @@ function startFireworksShow() {
   if (fireworksTimer) return;
 
   fireworksActive = true;
-  launchBurst(width / 2, height * 0.34, isMobileViewport() ? 24 : 54);
+  launchBurst(width / 2, height * 0.34, 54);
   launchRandomSparkler();
   setTimeout(launchRandomFirework, 380);
-  if (!isMobileViewport()) {
-    setTimeout(launchRandomSparkler, 560);
-    setTimeout(launchRandomFirework, 760);
-  }
+  setTimeout(launchRandomSparkler, 560);
+  setTimeout(launchRandomFirework, 760);
 
-  fireworksTimer = setInterval(launchRandomFirework, isMobileViewport() ? 2200 : 1350);
-  sparklerTimer = setInterval(launchRandomSparkler, isMobileViewport() ? 1400 : 620);
+  fireworksTimer = setInterval(launchRandomFirework, 1350);
+  sparklerTimer = setInterval(launchRandomSparkler, 620);
 }
 
 function clearFireworkParticles() {
@@ -341,7 +332,7 @@ function drawSky() {
   stars.forEach((star) => {
     star.phase += star.speed;
     const alpha = 0.58 + Math.sin(star.phase) * 0.34;
-    skyCtx.shadowBlur = isMobileViewport() ? 0 : 8;
+    skyCtx.shadowBlur = 8;
     skyCtx.shadowColor = "rgba(255, 248, 242, 0.9)";
     skyCtx.beginPath();
     skyCtx.fillStyle = `rgba(255, 248, 242, ${alpha})`;
