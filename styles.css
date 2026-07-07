@@ -41,24 +41,12 @@ body {
   -webkit-touch-callout: none;
 }
 
-body::before,
 body::after {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   content: "";
-}
-
-body::before {
-  background:
-    radial-gradient(circle at 50% 8%, rgba(255, 248, 242, 0.028), transparent 24rem),
-    radial-gradient(circle at 86% 20%, rgba(125, 226, 221, 0.065), transparent 22rem),
-    radial-gradient(circle at 10% 72%, rgba(255, 127, 176, 0.05), transparent 26rem),
-    linear-gradient(118deg, transparent 8%, rgba(255, 127, 176, 0.03) 26%, rgba(125, 226, 221, 0.045) 48%, transparent 72%);
-  mix-blend-mode: screen;
-  opacity: 0.24;
-  animation: auroraShift 15s ease-in-out infinite alternate;
 }
 
 body::after {
@@ -113,25 +101,6 @@ button {
   padding: 4.5rem 1.25rem 3.5rem;
   isolation: isolate;
   overflow: hidden;
-}
-
-.hero::before {
-  position: absolute;
-  pointer-events: none;
-  content: "";
-}
-
-.hero::before {
-  inset: -10% -18%;
-  z-index: 0;
-  background:
-    linear-gradient(105deg, transparent 0 14%, rgba(255, 127, 176, 0.05) 28%, rgba(125, 226, 221, 0.075) 50%, rgba(244, 201, 107, 0.04) 64%, transparent 82%),
-    linear-gradient(72deg, transparent 20%, rgba(255, 248, 242, 0.018), transparent 68%);
-  filter: blur(14px);
-  opacity: 0.3;
-  mix-blend-mode: screen;
-  transform: rotate(-7deg);
-  animation: heroAurora 13s ease-in-out infinite alternate;
 }
 
 .hero__media,
@@ -463,33 +432,9 @@ h2 {
   }
 }
 
-@keyframes auroraShift {
-  from {
-    opacity: 0.18;
-    transform: translate3d(-4vw, -2vh, 0) scale(1);
-  }
-
-  to {
-    opacity: 0.32;
-    transform: translate3d(6vw, 4vh, 0) scale(1.08);
-  }
-}
-
 @keyframes lightGridMove {
   to {
     transform: translate3d(5vw, -5vh, 0);
-  }
-}
-
-@keyframes heroAurora {
-  from {
-    opacity: 0.38;
-    transform: translate3d(-5vw, -2vh, 0) rotate(-10deg) scaleY(0.92);
-  }
-
-  to {
-    opacity: 0.66;
-    transform: translate3d(7vw, 3vh, 0) rotate(-4deg) scaleY(1.08);
   }
 }
 
